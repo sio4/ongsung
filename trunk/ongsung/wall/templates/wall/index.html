@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}My Ongsung{% endblock %}
+
+{% block content %}
+
+<div id="connect_form">
+<form method="post" action="connect/">
+	<input type="text" name="addr" value="" size=40>
+	<input type="submit" value="connect">
+</form>
+</div>
+
+<h3>stared</h3>
+{% with stared as objects %}
+{% include 'wall/_bookmarks.html' %}
+{% endwith %}
+
+<h3>recent</h3>
+{% with recent as objects %}
+{% include 'wall/_bookmarks.html' %}
+{% endwith %}
+
+{% endblock %}
+
+

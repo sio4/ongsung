@@ -1,0 +1,28 @@
+{% if objects %}
+<table width="100%">
+<tr>
+	<th></th>
+	<th>device</th>
+	<th>last access</th>
+	<th>count</th>
+	<th>protocol</th>
+	<th>port</th>
+</tr>
+{% for o in objects %}
+<tr>
+<td><img src="statics/{% if o.stared %}goldstar{% else %}darkstar{% endif %}.png"></td>
+<td>{{ o }} ({{ o.device.addr }})</td>
+<td>{{ o.last_date }}</td>
+<td>{{ o.count }}</td>
+<td>{{ o.device.prot.name }}</td>
+<td>
+	{% if o.device.port %}
+	({{ o.device.port }})
+	{% endif %}
+</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+No object found
+{% endif %}

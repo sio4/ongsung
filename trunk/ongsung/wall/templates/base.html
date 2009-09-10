@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<link rel="stylesheet" href="{{MEDIA_URL}}style.css" />
+		<title>{% block title %}{% endblock %} - Ongsung</title>
+	</head>
+
+	<body>
+		<div id="header">
+			Ongsung --
+		</div>
+		<div id="sidebar">
+		{% block sidebar %}
+			<ul>
+				<li><a href="/">Home</a></li>
+			</ul>
+		{% endblock %}
+		</div>
+
+		<div id="content">
+		{% block content %}{% endblock %}
+		</div>
+		<div id="footer">
+			ongsung...
+		</div>
+	</body>
+</html>
+
+<style>
+	body { margin: 0; font-family: "Trebuchet MS"; }
+	div { padding: 4px; }
+	td,th { border: 1px solid black; text-align: center; }
+
+	#sidebar {
+		float: right;
+		border-left: 1px solid #ccc;
+		min-height: 200pt;
+		width: 200px;
+	}
+	#content { overflow: hidden; min-height: 200pt; padding: 10px; }
+
+	#header { border-bottom: 1px solid #999; }
+	#footer { border-top: 1px solid #999; text-align: center; }
+</style>
+
+<!-- vim: set ts=2 sw=2 : -->
