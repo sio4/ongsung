@@ -26,12 +26,21 @@
 			<ul id="side-basic">
 				<li><a href="/">Home</a></li>
 			</ul>
+		{% if user.is_authenticated %}
 			<h5>Register for IE7</h5>
 			<ul id="side-basic">
 				<li><a href="statics/enable-telnet-ie7.reg">Enable telnet</a></li>
 				<li><a href="statics/telnet-handler-default.reg">Default</a></li>
 				<li><a href="statics/telnet-handler-putty.reg">Putty</a></li>
 			</ul>
+			<h5>Download putty directly</h5>
+			<ul>
+				<li><a href="statics/putty.exe">putty.exe</a></li>
+				<li><a href="statics/putty-licence.txt">putty license</a></li>
+				<li><a href="statics/putty-url.txt">putty url</a></li>
+			</ul>
+			<p>putty is distributed under MIT license. (GPL compatable)</p>
+		{% endif %}
 		{% endblock %}
 		</div>
 
