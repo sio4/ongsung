@@ -6,13 +6,19 @@
 
 <div id="connect_form">
 <form method="post" action="connect/">
+	<label>conntect to: </label>
 	<input type="text" name="addr" value="" size=40>
-	<input type="submit" value="connect">
+	<input type="submit" value="open">
 </form>
 </div>
 
 <h3>stared</h3>
 {% with stared as objects %}
+{% include 'wall/_bookmarks.html' %}
+{% endwith %}
+
+<h3>top 10</h3>
+{% with top as objects %}
 {% include 'wall/_bookmarks.html' %}
 {% endwith %}
 
