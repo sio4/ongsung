@@ -29,9 +29,16 @@ def index(request, template_name='wall/index.html'):
 	except:
 		error = ''
 
+	try:
+		launch = request.session['launch']
+		request.session['launch'] = ''
+	except:
+		launch = ''
+
 	return render_to_response(template_name,
 			{'user':request.user, 'message':message, 'error':error,
-				'recent':recent, 'stared':stared, 'top':top})
+				'recent':recent, 'stared':stared, 'top':top,
+				'launch':launch})
 
 @login_required
 def connect(request, device_id=None):
@@ -72,8 +79,10 @@ def connect(request, device_id=None):
 
 	# templorary
 	port = 8000
-	os.system('ongsung-tunnel %s %s &' % (addr, port))
+	os.system('ongsung-tunnel %s %s' % (addr, port))
 
+	server_addr = request.META['HTTP_HOST'].split(':')[0]
+	request.session['launch'] = 'telnet://%s:%s' % (server_addr, 8000)
 	request.session['message'] = message
 	return HttpResponseRedirect(reverse('wall.views.index'))
 
