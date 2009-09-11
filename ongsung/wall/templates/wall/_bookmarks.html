@@ -10,11 +10,11 @@
 </tr>
 {% for o in objects %}
 <tr>
-<td><img src="statics/{% if o.stared %}goldstar{% else %}darkstar{% endif %}.png"></td>
-<td>{{ o }} ({{ o.device.addr }})</td>
+<td><a href="{% url wall.views.stared bookmark_id=o.id %}"><img src="statics/{% if o.stared %}goldstar{% else %}darkstar{% endif %}.png"></a></td>
+<td><a href="{% url wall.views.conn device_id=o.device.id %}">{{ o }} ({{ o.device.addr }})</a></td>
 <td>{{ o.last_date }}</td>
 <td>{{ o.count }}</td>
-<td>{{ o.device.prot.name }}</td>
+<td><a href="{% url wall.views.conn device_id=o.device.id %}">{{ o.device.prot.name }} (connect)</a></td>
 <td>
 	{% if o.device.port %}
 	({{ o.device.port }})
