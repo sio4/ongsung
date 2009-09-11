@@ -13,9 +13,9 @@ import datetime
 
 @login_required
 def index(request, template_name='wall/index.html'):
-	recent = Bookmark.objects.all().order_by('-last_date')[:5]
-	top = Bookmark.objects.all().order_by('-count')[:5]
-	stared = Bookmark.objects.filter(stared=True).order_by('-count')[:5]
+	recent = Bookmark.objects.filter(user=request.user).order_by('-last_date')[:5]
+	top = Bookmark.objects.filter(user=request.user).order_by('-count')[:5]
+	stared = Bookmark.objects.filter(user=request.user,stared=True).order_by('-count')[:5]
 
 	try:
 		message = request.session['message']
