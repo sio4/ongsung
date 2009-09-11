@@ -1,0 +1,7 @@
+#!/bin/sh
+
+arg=`echo $@|sed 's/ /-/g'`
+
+#gnome-terminal -e "vim +/$arg $arg"
+
+gnome-terminal -e "telnet $1 $2"

@@ -33,23 +33,33 @@ def index(request, template_name='wall/index.html'):
 			{'user':request.user, 'message':message, 'error':error,
 				'recent':recent, 'stared':stared, 'top':top})
 
-def connect(request):
+@login_required
+def connect(request, device_id=None):
 	user = request.user
-	requested_addr = request.POST['addr'].split()[0]
 	current_datetime = datetime.datetime.now()
+	message = ''
+	error = ''
 
+	# select device to connect if possible.
 	try:
-		d = Device.objects.filter(addr=requested_addr)[0]
-		addr = d.addr
-		port = d.port
-		message = "device(%s) selected." % d.name
+		if request.META['REQUEST_METHOD'] == 'POST':
+			requested_addr = request.POST['addr'].split()[0]
+			d = Device.objects.filter(addr=requested_addr)[0]
+		elif request.META['REQUEST_METHOD'] == 'GET' and device_id:
+			d = Device.objects.get(pk=device_id)
 	except:
-		error = "unknown device or invalid."
+		error += "device selection error: unknown device or invalid."
 		error += " contact to system administrator."
 
+		request.session['message'] = message
 		request.session['error'] = error
 		return HttpResponseRedirect(reverse('wall.views.index'))
 
+	addr = d.addr
+	port = d.port
+	message += "device(%s) selected." % d.name
+
+	# update or create bookmark
 	try:
 		b = Bookmark.objects.filter(user=user,device=d)[0]
 		b.last_date = current_datetime
@@ -67,6 +77,20 @@ def connect(request):
 	request.session['message'] = message
 	return HttpResponseRedirect(reverse('wall.views.index'))
 
+# maybe this is my fault. i cannot write smart urls.py yet.
+@login_required
+def conn(request, device_id):
+	return connect(request, device_id=device_id)
+
+@login_required
 def stared(request,bookmark_id):
+	b = Bookmark.objects.get(pk=bookmark_id)
+
+	if b.stared:
+		b.stared = False
+	else:
+		b.stared = True
+	b.save()
+	
 	return HttpResponseRedirect(reverse('wall.views.index'))
 
