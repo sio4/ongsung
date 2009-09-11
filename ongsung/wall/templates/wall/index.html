@@ -27,6 +27,22 @@
 {% include 'wall/_bookmarks.html' %}
 {% endwith %}
 
+<iframe id="launcher" src=""
+	style="border:1px solid black; width:10px; height:10px;"></iframe>
+
 {% endblock %}
 
 
+{% block script %}
+
+function openTerminal(url) {
+	if (url != '') { 
+		lf = document.getElementById('launcher');
+		lf.src = '{{ launch }}';
+		//alert("xx" + lf.src)
+	}
+}
+
+window.onload = openTerminal;
+
+{% endblock %}
