@@ -7,41 +7,85 @@
 	</head>
 
 	<body>
-		<div id="header">
-			Ongsung --
+		<div id="header" class="frame">
+			<h1 id="main-title">Ongsung</h1>
+			<h5 id="tagline">secure gateway</h5>
 		</div>
-		<div id="sidebar">
+		<div id="sidebar" class="frame">
 		{% block sidebar %}
-			<ul>
+		{% if user.is_authenticated %}
+			<p>Welcome, {{ user.username }}</p>
+			<ul id="side-meta">
+				<li>Preference
+				<li>Logout
+			</ul>
+		{% endif %}
+			<ul id="side-basic">
 				<li><a href="/">Home</a></li>
 			</ul>
 		{% endblock %}
 		</div>
 
-		<div id="content">
+		<div id="content" class="frame">
+			{% if error %}
+			<div id=error>{{ error }}</div>
+			{% endif %}
+			{% if message %}
+			<div id=message>{{ message }}</div>
+			{% endif %}
 		{% block content %}{% endblock %}
 		</div>
-		<div id="footer">
-			ongsung...
+		<div id="footer" class="frame">
+			ongsung 0.9 &copy; 2009 Free Software Foundation
 		</div>
 	</body>
 </html>
 
 <style>
-	body { margin: 0; font-family: "Trebuchet MS"; }
-	div { padding: 4px; }
-	td,th { border: 1px solid black; text-align: center; }
+	body { margin:0; font-family:"Trebuchet MS"; font-size:10pt; color:#002850;}
+	h1 { font-size: 200%; font-weight: bolder; }
+	h2 { font-size: 170%; }
+	h3 { font-size: 150%; }
+	h4 { font-size: 130%; }
+	h5 { font-size: 110%; }
+	td,th {
+		border-bottom: 1px solid #347392;
+		background: #e4edf1;
+		text-align: center;
+		padding: 0;
+	}
+	a,a:visited {color: #79aac0; text-decoration: none; }
+	ul { list-style: square; }
+	img { border: 0px; }
+
+	/* classes */
+	div.frame { padding: 10px; }
+	div.box { background: #588faa; border: 2px solid #084168; padding: 10px; }
 
 	#sidebar {
 		float: right;
-		border-left: 1px solid #ccc;
+		border-left: 1px solid #79aac0;
 		min-height: 200pt;
 		width: 200px;
 	}
-	#content { overflow: hidden; min-height: 200pt; padding: 10px; }
+	#content { overflow: hidden; min-height: 200pt; padding-bottom: 50px; }
+	#message { background:#ffa; border:2px solid #990; padding:20px; margin:15px}
+	#error { background:#faf; border:2px solid #909; padding:20px; margin:15px}
 
-	#header { border-bottom: 1px solid #999; }
-	#footer { border-top: 1px solid #999; text-align: center; }
+	#header { border-bottom: 1px solid #588faa; background:#084168; color:white; }
+	#footer { border-top: 1px solid #588faa; text-align: center; }
+
+	h1#main-title { margin-bottom: 2px; }
+	h5#tagline { margin: 0px; padding-left: 10px; }
+
+	div#login_form { margin: auto; width: 25em; text-align: center; }
+	div#login_form div { text-align: left; margin: 4px; background: transparent; }
+	div#login_form label { width: 9em; float:left; text-align: right; }
+	div#login_form form input { border: 1px solid #002a52; margin-left: 4px;}
+
+	div#connect_form { text-align: center; }
+	div#connect_form form input { border: 1px solid #002a52; }
+
 </style>
 
 <!-- vim: set ts=2 sw=2 : -->

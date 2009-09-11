@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+{% block headline %}Login{% endblock %}
+
+{% block content %}
+
+{% if form.has_errors %}
+<p>Enter Username and Password.</p>
+{% endif %}
+
+<div id="login_form" class="box">
+	<h2>Login</h2>
+	<form method="post" action=".">
+		<div><label for="id_username">username:</label> {{ form.username }}</td></div>
+		<div><label for="id_password">password:</label> {{ form.password }}</div>
+
+	<input type="submit" value="Login" />
+	<input type="hidden" name="next" value="{{ next }}" />
+	</form>
+</div>
+
+{% endblock %}
+
