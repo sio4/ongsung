@@ -1,0 +1,6 @@
+http://www.chiark.greenend.org.uk/~sgtatham/putty/
+http://the.earth.li/~sgtatham/putty/latest/putty-0.60.tar.gz 
+http://the.earth.li/~sgtatham/putty/latest/x86/putty.exe 
+http://the.earth.li/~sgtatham/putty/latest/x86/puttytel.exe 
+http://the.earth.li/~sgtatham/putty/latest/x86/pscp.exe 
+http://the.earth.li/~sgtatham/putty/latest/x86/psftp.exe 
