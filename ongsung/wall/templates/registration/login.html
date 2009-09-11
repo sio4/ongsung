@@ -22,3 +22,13 @@
 
 {% endblock %}
 
+
+{% block script %}
+
+function setFocus() {
+	document.getElementById('id_username').focus();
+}
+
+window.onload = setFocus;
+
+{% endblock %}

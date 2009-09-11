@@ -7,7 +7,7 @@
 <div id="connect_form">
 <form method="post" action="connect/">
 	<label>conntect to: </label>
-	<input type="text" name="addr" value="" size=40>
+	<input type="text" name="addr" value="" size=40 id="id_address">
 	<input type="submit" value="open">
 </form>
 </div>
@@ -41,6 +41,8 @@ function openTerminal(url) {
 		lf.src = '{{ launch }}';
 		//alert("xx" + lf.src)
 	}
+
+	document.getElementById('id_address').focus();
 }
 
 window.onload = openTerminal;
