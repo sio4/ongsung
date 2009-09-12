@@ -9,6 +9,7 @@
  * all present and future rights to this code under copyright law. 
  */
 
+#include <stdarg.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -41,12 +42,25 @@
 # define COLOR_NORMAL ""
 #endif
 
+//#define DEBUG(args)	printf args
+#define DEBUG(args)
+
 struct conn_t {
 	const char *name;
 	int sock;
 	telnet_t telnet;
 	struct conn_t *remote;
 };
+
+void os_log(char *format, ...) {
+	va_list ap;
+
+	fprintf(stderr, "LOG: ");
+	va_start(ap, format);
+	vfprintf(stderr, format, ap);
+	va_end(ap);
+	fprintf(stderr, "\n");
+}
 
 static const char *get_cmd(unsigned char cmd) {
 	static char buffer[4];
@@ -133,12 +147,12 @@ static void print_buffer(const char *buffer, size_t size) {
 	size_t i;
 	for (i = 0; i != size; ++i) {
 		if (buffer[i] == ' ' || (isprint(buffer[i]) && !isspace(buffer[i])))
-			printf("%c", (char)buffer[i]);
+			DEBUG(("%c", (char)buffer[i]));
 		else if (buffer[i] == '\n')
-			printf("<" COLOR_BOLD "0x%02X" COLOR_UNBOLD ">\n",
-					(int)buffer[i]);
+			DEBUG(("<" COLOR_BOLD "0x%02X" COLOR_UNBOLD ">\n",
+					(int)buffer[i]));
 		else
-			printf("<" COLOR_BOLD "0x%02X" COLOR_UNBOLD ">", (int)buffer[i]);
+			DEBUG(("<" COLOR_BOLD "0x%02X" COLOR_UNBOLD ">", (int)buffer[i]));
 	}
 }
 
@@ -165,6 +179,10 @@ static void _send(int sock, const char *buffer, size_t size) {
 	}
 }
 
+char x_cmd[128] = "";
+int ind;
+
+
 static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 		void *user_data) {
 	struct conn_t *conn = (struct conn_t*)user_data;
@@ -172,53 +190,63 @@ static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 	switch (ev->type) {
 	/* data received */
 	case TELNET_EV_DATA:
-		printf("%s DATA: ", conn->name);
+		DEBUG(("%s DATA: ", conn->name));
 		print_buffer(ev->buffer, ev->size);
-		printf(COLOR_NORMAL "\n");
+		DEBUG((COLOR_NORMAL "\n"));
+
+		if (strchr(conn->name, 'C')) {
+			if ((char)ev->buffer[0] == 0x0D) {
+				os_log("cmd: %s,%d",
+						x_cmd, (int)strlen(x_cmd));
+				x_cmd[0] = '\0';
+			} else {
+				sprintf(x_cmd,"%s%c",x_cmd,(char)ev->buffer[0]);
+			}
+		}
 
 		telnet_send(&conn->remote->telnet, ev->buffer, ev->size);
 		break;
 	/* data must be sent */
 	case TELNET_EV_SEND:
 		/* DONT SPAM
-		printf("%s SEND: ", conn->name);
+		DEBUG(("%s SEND: ", conn->name));
 		print_buffer(ev->buffer, ev->size);
-		printf(COLOR_BOLD "\n");
+		DEBUG((COLOR_BOLD "\n"));
 		*/
 
 		_send(conn->sock, ev->buffer, ev->size);
 		break;
 	/* IAC command */
 	case TELNET_EV_IAC:
-		printf("%s IAC %s" COLOR_NORMAL "\n", conn->name,
-				get_cmd(ev->command));
+		DEBUG(("%s IAC %s" COLOR_NORMAL "\n", conn->name,
+				get_cmd(ev->command)));
 
 		telnet_iac(&conn->remote->telnet, ev->command);
 		break;
 	/* negotiation, WILL */
 	case TELNET_EV_WILL:
-		printf("%s IAC WILL %d (%s)" COLOR_NORMAL "\n", conn->name,
-				(int)ev->telopt, get_opt(ev->telopt));
+		DEBUG(("%s IAC WILL %d (%s)" COLOR_NORMAL "\n", conn->name,
+				(int)ev->telopt, get_opt(ev->telopt)));
 		telnet_negotiate(&conn->remote->telnet, TELNET_WILL,
 				ev->telopt);
 		break;
 	/* negotiation, WONT */
 	case TELNET_EV_WONT:
-		printf("%s IAC WONT %d (%s)" COLOR_NORMAL "\n", conn->name,
-				(int)ev->telopt, get_opt(ev->telopt));
+		DEBUG(("%s IAC WONT %d (%s)" COLOR_NORMAL "\n", conn->name,
+				(int)ev->telopt, get_opt(ev->telopt)));
 		telnet_negotiate(&conn->remote->telnet, TELNET_WONT,
 				ev->telopt);
 		break;
 	/* negotiation, DO */
 	case TELNET_EV_DO:
-		printf("%s IAC DO %d (%s)" COLOR_NORMAL "\n", conn->name,
-				(int)ev->telopt, get_opt(ev->telopt));
+		DEBUG(("%s IAC DO %d (%s)" COLOR_NORMAL "\n", conn->name,
+				(int)ev->telopt, get_opt(ev->telopt)));
 		telnet_negotiate(&conn->remote->telnet, TELNET_DO,
 				ev->telopt);
 		break;
 	case TELNET_EV_DONT:
-		printf("%s IAC DONT %d (%s)" COLOR_NORMAL "\n", conn->name,
-				(int)ev->telopt, get_opt(ev->telopt));
+		DEBUG(("%s IAC DONT %d (%s)" COLOR_NORMAL "\n", conn->name,
+				(int)ev->telopt, get_opt(ev->telopt)));
 		telnet_negotiate(&conn->remote->telnet, TELNET_DONT,
 				ev->telopt);
 		break;
@@ -227,40 +255,40 @@ static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 		if (ev->telopt == TELNET_TELOPT_ZMP) {
 			if (ev->argc != 0) {
 				size_t i;
-				printf("%s ZMP [%zi params]", conn->name, ev->argc);
+				DEBUG(("%s ZMP [%zi params]", conn->name, ev->argc));
 				for (i = 0; i != ev->argc; ++i) {
-					printf(" \"");
+					DEBUG((" \""));
 					print_buffer(ev->argv[i], strlen(ev->argv[i]));
-					printf("\"");
+					DEBUG(("\""));
 				}
-				printf(COLOR_NORMAL "\n");
+				DEBUG((COLOR_NORMAL "\n"));
 			} else {
-				printf("%s ZMP (malformed!) [%zi bytes]",
-						conn->name, ev->size);
+				DEBUG(("%s ZMP (malformed!) [%zi bytes]",
+						conn->name, ev->size));
 				print_buffer(ev->buffer, ev->size);
-				printf(COLOR_NORMAL "\n");
+				DEBUG((COLOR_NORMAL "\n"));
 			}
 		} else if (ev->telopt == TELNET_TELOPT_TTYPE ||
 				ev->telopt == TELNET_TELOPT_ENVIRON ||
 				ev->telopt == TELNET_TELOPT_NEW_ENVIRON ||
 				ev->telopt == TELNET_TELOPT_MSSP) {
 			size_t i;
-			printf("%s %s [%zi parts]", conn->name, get_opt(ev->telopt),
-					ev->argc);
+			DEBUG(("%s %s [%zi parts]", conn->name, get_opt(ev->telopt),
+					ev->argc));
 			for (i = 0; i != ev->argc; ++i) {
-				printf(" \"");
+				DEBUG((" \""));
 				print_buffer(ev->argv[i], strlen(ev->argv[i] + 1) + 1);
-				printf("\"");
+				DEBUG(("\""));
 			}
-			printf(COLOR_NORMAL "\n");
+			DEBUG((COLOR_NORMAL "\n"));
 		} else {
-			printf("%s SUB %d (%s)", conn->name, (int)ev->telopt,
-					get_opt(ev->telopt));
+			DEBUG(("%s SUB %d (%s)", conn->name, (int)ev->telopt,
+					get_opt(ev->telopt)));
 			if (ev->size > 0) {
-				printf(" [%zi bytes]: ", ev->size);
+				DEBUG((" [%zi bytes]: ", ev->size));
 				print_buffer(ev->buffer, ev->size);
 			}
-			printf(COLOR_NORMAL "\n");
+			DEBUG((COLOR_NORMAL "\n"));
 		}
 
 		/* forward */
@@ -269,16 +297,16 @@ static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 		break;
 	/* compression notification */
 	case TELNET_EV_COMPRESS:
-		printf("%s COMPRESSION %s" COLOR_NORMAL "\n", conn->name,
-				ev->command ? "ON" : "OFF");
+		DEBUG(("%s COMPRESSION %s" COLOR_NORMAL "\n", conn->name,
+				ev->command ? "ON" : "OFF"));
 		break;
 	/* warning */
 	case TELNET_EV_WARNING:
-		printf("%s WARNING: %s" COLOR_NORMAL "\n", conn->name, ev->buffer);
+		DEBUG(("%s WARNING: %s" COLOR_NORMAL "\n", conn->name, ev->buffer));
 		break;
 	/* error */
 	case TELNET_EV_ERROR:
-		printf("%s ERROR: %s" COLOR_NORMAL "\n", conn->name, ev->buffer);
+		DEBUG(("%s ERROR: %s" COLOR_NORMAL "\n", conn->name, ev->buffer));
 		exit(1);
 	}
 }
@@ -297,15 +325,16 @@ int main(int argc, char **argv) {
 	struct addrinfo hints;
 
 	/* check usage */
-	if (argc != 4) {
-		fprintf(stderr, "Usage:\n ./telnet-proxy <remote ip> <remote port> "
-				"<local port>\n");
+	if (argc != 5) {
+		fprintf(stderr, "Usage: %s target_ip target_port "
+				"local_port client_ip\n", argv[0]);
 		return 1;
 	}
 
 	/* parse listening port */
 	listen_port = strtol(argv[3], 0, 10);
 
+	os_log("tunnel from %s to %s is drilled.", argv[4], argv[1]);
 	/* loop forever, until user kills process */
 	for (;;) {
 		/* create listening socket */
@@ -328,7 +357,9 @@ int main(int argc, char **argv) {
 			return 1;
 		}
 
-		printf("LISTENING ON PORT %d\n", listen_port);
+		DEBUG(("LISTENING ON PORT %d\n", listen_port));
+
+		/* maybe we need timeout here. with alarm? */
 
 		/* wait for client */
 		if (listen(listen_sock, 1) == -1) {
@@ -342,10 +373,29 @@ int main(int argc, char **argv) {
 			return 1;
 		}
 
-		printf("CLIENT CONNECTION RECEIVED\n");
+		DEBUG(("CLIENT CONNECTION RECEIVED\n"));
 		
 		/* stop listening now that we have a client */
 		close(listen_sock);
+
+		/* so what? ok, here is the point of checking peer is valid.
+		 * check ip_address and port! oh! can I use revert connection?
+		 * it is safe for firewall environment and more secure.
+		 * ok, then we need so called "local proxy" too. ok, but it
+		 * need some problem. for example... windows os firewall. yep.
+		 * just go ahead!
+		 *
+		 * if we use ssh for client-gateway connection, then we can
+		 * use one-time-keypair.
+		 */
+
+		if (strcmp(argv[4], inet_ntoa(addr.sin_addr))) {
+			os_log("connection from unauthorized host(%s)."
+					" reject and continue.",
+					inet_ntoa(addr.sin_addr));
+			close(client.sock);
+			continue;
+		}
 
 		/* look up server host */
 		memset(&hints, 0, sizeof(hints));
@@ -377,10 +427,12 @@ int main(int argc, char **argv) {
 			return 1;
 		}
 
+		os_log("connection established. (%s to %s)", argv[4], argv[1]);
+
 		/* free address lookup info */
 		freeaddrinfo(ai);
 
-		printf("SERVER CONNECTION ESTABLISHED\n");
+		DEBUG(("SERVER CONNECTION ESTABLISHED\n"));
 
 		/* initialize connection structs */
 		server.name = COLOR_SERVER "SERVER";
@@ -408,7 +460,7 @@ int main(int argc, char **argv) {
 				if ((rs = recv(server.sock, buffer, sizeof(buffer), 0)) > 0) {
 					telnet_recv(&server.telnet, buffer, rs);
 				} else if (rs == 0) {
-					printf("%s DISCONNECTED" COLOR_NORMAL "\n", server.name);
+					DEBUG(("%s DISCONNECTED" COLOR_NORMAL "\n", server.name));
 					break;
 				} else {
 					if (errno != EINTR && errno != ECONNRESET) {
@@ -424,7 +476,7 @@ int main(int argc, char **argv) {
 				if ((rs = recv(client.sock, buffer, sizeof(buffer), 0)) > 0) {
 					telnet_recv(&client.telnet, buffer, rs);
 				} else if (rs == 0) {
-					printf("%s DISCONNECTED" COLOR_NORMAL "\n", client.name);
+					DEBUG(("%s DISCONNECTED" COLOR_NORMAL "\n", client.name));
 					break;
 				} else {
 					if (errno != EINTR && errno != ECONNRESET) {
@@ -443,8 +495,13 @@ int main(int argc, char **argv) {
 		close(client.sock);
 
 		/* all done */
-		printf("BOTH CONNECTIONS CLOSED\n");
+		DEBUG(("BOTH CONNECTIONS CLOSED\n"));
+		/* loop is forever but serve once.
+		 * inifinite loop is for case of connection failed by...
+		 */
+		break;
 	}
+	os_log("mission completed! yiman...", argv[4], argv[1]);
 
 	/* not that we can reach this, but GCC will cry if it's not here */
 	return 0;
