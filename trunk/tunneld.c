@@ -179,7 +179,9 @@ static void _send(int sock, const char *buffer, size_t size) {
 	}
 }
 
-char x_cmd[128] = "";
+#define BUFFER_SIZE 80
+
+char x_cmd[BUFFER_SIZE + 1] = "";
 int ind;
 
 
@@ -199,6 +201,14 @@ static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 				os_log("cmd: %s,%d",
 						x_cmd, (int)strlen(x_cmd));
 				x_cmd[0] = '\0';
+				/* add some start mark for nature one? */
+			} else if (strlen(x_cmd) >= (BUFFER_SIZE)) {
+				/* add :CONT: sign to very long line.
+				 * especially for screen mode.
+				 */
+				os_log("cmd: %s:CONT,%d",
+						x_cmd, (int)strlen(x_cmd));
+				sprintf(x_cmd, "CONT:%c", (char)ev->buffer[0]);
 			} else {
 				sprintf(x_cmd,"%s%c",x_cmd,(char)ev->buffer[0]);
 			}
