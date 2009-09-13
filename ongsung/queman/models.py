@@ -75,3 +75,14 @@ class Queue(models.Model):
 		else:
 			return datetime.datetime.now() - self.created_at
 
+	def created_time(self):
+		return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+
+	def updated_time(self):
+		return self.updated_at.strftime("%Y-%m-%d %H:%M:%S")
+
+	def started_time(self):
+		return self.started_at.strftime("%Y-%m-%d %H:%M:%S")
+
+	def finished_time(self):
+		return self.finished_at.strftime("%Y-%m-%d %H:%M:%S")
