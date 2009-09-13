@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<queue_list>
+	{% if queue_list %}
+	{% for q in queue_list %}
+	<queue id="{{ q.id }}">
+		<command>{{ q.command }}</command>
+		<owner>
+			<username>{{ q.owner.username }}</username>
+		</owner>
+		<feature>
+			<name>{{ q.feature.name }}</name>
+		</feature>
+		<worker>
+			<name>{{ q.worker.name }}</name>
+			<addr>{{ q.worker.addr }}</addr>
+		</worker>
+		<info>{{ q.info }}</info>
+		<status>{{ q.status }}</status>
+		<description>{{ q.description }}</description>
+		<created_at>{{q.created_at|date:"Y-m-d H:i:s T"}}</created_at>
+		<updated_at>{{q.updated_at|date:"Y-m-d H:i:s T"}}</updated_at>
+		<started_at>{{q.started_at|date:"Y-m-d H:i:s T"}}</started_at>
+		<finished_at>{{q.finished_at|date:"Y-m-d H:i:s T"}}</finished_at>
+	</queue>
+	{% endfor %}
+	{% endif %}
+</queue_list>
