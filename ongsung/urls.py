@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     # Example:
     # (r'^ongsung/', include('ongsung.foo.urls')),
     (r'^ongsung/', include('wall.urls')),
+    (r'^q/', include('queman.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
