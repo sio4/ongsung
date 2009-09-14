@@ -337,14 +337,14 @@ int main(int argc, char **argv) {
 	/* check usage */
 	if (argc != 5) {
 		fprintf(stderr, "Usage: %s target_ip target_port "
-				"local_port client_ip\n", argv[0]);
+				"client_ip local_port\n", argv[0]);
 		return 1;
 	}
 
 	/* parse listening port */
-	listen_port = strtol(argv[3], 0, 10);
+	listen_port = strtol(argv[4], 0, 10);
 
-	os_log("tunnel from %s to %s is drilled.", argv[4], argv[1]);
+	os_log("tunnel from %s to %s is drilled.", argv[3], argv[1]);
 	/* loop forever, until user kills process */
 	for (;;) {
 		/* create listening socket */
@@ -399,7 +399,7 @@ int main(int argc, char **argv) {
 		 * use one-time-keypair.
 		 */
 
-		if (strcmp(argv[4], inet_ntoa(addr.sin_addr))) {
+		if (strcmp(argv[3], inet_ntoa(addr.sin_addr))) {
 			os_log("connection from unauthorized host(%s)."
 					" reject and continue.",
 					inet_ntoa(addr.sin_addr));

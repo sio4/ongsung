@@ -28,8 +28,9 @@ libtelnet/.libs/libtelnet.a:
 
 
 
-tunneld: tunneld.o libtelnet/.libs/libtelnet.so
-	$(CC) $(LDFLAGS) -o $@ $<
+tunneld: tunneld.o libtelnet/.libs/libtelnet.a
+	$(CC) -o $@ $< libtelnet/.libs/libtelnet.a
+	#$(CC) $(LDFLAGS) -o $@ $<
 
 
 
