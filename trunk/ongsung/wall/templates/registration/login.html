@@ -12,11 +12,13 @@
 <div id="login_form" class="box">
 	<h2>Login</h2>
 	<form method="post" action=".">
-		<div><label for="id_username">username:</label> {{ form.username }}</td></div>
-		<div><label for="id_password">password:</label> {{ form.password }}</div>
+		<div style="text-align:left;"><label for="id_username">username:</label> {{ form.username }}</div>
+		<div style="text-align:left;"><label for="id_password">password:</label> {{ form.password }}</div>
 
-	<input type="submit" value="Login" />
-	<input type="hidden" name="next" value="{{ next }}" />
+		<div style="text-align:center;">
+		<input type="submit" value="Login" />
+		<input type="hidden" name="next" value="{{ next }}" />
+		</div>
 	</form>
 </div>
 
