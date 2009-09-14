@@ -28,8 +28,12 @@ def daemonize():
 	os.close(null)
 
 
+exec_path = '/home/sio4/works/ongsung/ongsung.km/trunk'
+exec_name = 'tunneld.static'
 
-command = 'sleep 1; xterm -e "telnet %s %s"' %(sys.argv[1], sys.argv[2])
+#command = 'xterm -e "%s/%s %s %s %s %s"' % (exec_path, exec_name,
+command = '%s/%s %s %s %s %s' % (exec_path, exec_name,
+		sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 
 daemonize()
 os.system(command);
