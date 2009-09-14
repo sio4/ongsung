@@ -79,7 +79,7 @@ def connect(request, device_id=None):
 		message += ' grad to see you!'
 	b.save()
 
-	#os.system('ongsung-tunnel %s %s' % (addr, port))
+	os.system('ongsung-tunnel %s %s' % (addr, port))
 	command = 'ongsung-tunnel %s %s' % (addr, port)
 
 	# insert job into queue...
