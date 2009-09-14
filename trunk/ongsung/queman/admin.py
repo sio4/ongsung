@@ -16,7 +16,7 @@ class QueueAdmin(admin.ModelAdmin):
 	list_display = ('command','owner','feature','status','worker','info',
 			'created_time', 'updated_time',
 			'started_time', 'finished_time')
-	list_filter = ['command','owner','feature','status','worker']
+	list_filter = ['owner','feature','status','worker']
 
 admin.site.register(Feature,FeatureAdmin)
 admin.site.register(Worker,WorkerAdmin)
