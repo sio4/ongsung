@@ -1,6 +1,8 @@
 # Create your views here.
 
 from queman.models import *
+from django.contrib.auth.models import User
+
 from django.http import HttpResponse, HttpResponseNotModified
 from django.utils.feedgenerator import Rss201rev2Feed
 
@@ -30,10 +32,18 @@ def render_xml(request, queue_list, template='queue.xml'):
 
 
 def create(request):
-	# fianlly, it must be POST. but now, just test easilly.
-	f = Feature.objects.filter(name=request.GET['feature'])[0]
-	q = Queue(owner=request.user,command=request.GET['command'],feature=f)
+	if request.POST.get('feature', '') == '':
+		return HttpResponse(status=404)
+	if request.POST.get('command', '') == '':
+		return HttpResponse(status=404)
+	if request.POST.get('user', '') == '':
+		return HttpResponse(status=404)
+
+	f = Feature.objects.filter(name=request.POST['feature'])[0]
+	u = User.objects.get(pk=request.POST['user'])
+	q = Queue(owner=u,feature=f,command=request.POST['command'])
 	q.save()
+
 	return render_xml(request, [q])
 
 def detail(request, queue_id):

@@ -10,6 +10,8 @@ from django.core.urlresolvers import reverse
 
 import os
 import datetime
+import httplib, urllib
+
 
 @login_required
 def index(request, template_name='wall/index.html'):
@@ -77,12 +79,30 @@ def connect(request, device_id=None):
 		message += ' grad to see you!'
 	b.save()
 
-	# templorary
-	port = 8000
-	os.system('ongsung-tunnel %s %s' % (addr, port))
+	#os.system('ongsung-tunnel %s %s' % (addr, port))
+	command = 'ongsung-tunnel %s %s' % (addr, port)
 
+	# insert job into queue...
+	params = urllib.urlencode({'command':command, 'feature':'telnet',
+		'user':request.user.id})
+	headers = {"Content-type":"application/x-www-form-urlencoded"}
+	conn = httplib.HTTPConnection("localhost")
+	conn.request("POST", "/q/create/", params, headers)
+	response = conn.getresponse()
+	data = response.read()
+	conn.close()
+
+	if response.status != 200:
+		error += 'job insertion failed.'
+		error += ' %s %s' % (response.status, response.reason)
+		request.session['error'] = error
+		return HttpResponseRedirect(reverse('wall.views.index'))
+
+	# waiting for worker attached and get connection info...
+
+	## temporary, just to me.
 	server_addr = request.META['HTTP_HOST'].split(':')[0]
-	request.session['launch'] = 'telnet://%s:%s' % (server_addr, 8000)
+	request.session['launch'] = 'telnet://%s:%s' % (server_addr, 80)
 	request.session['message'] = message
 	return HttpResponseRedirect(reverse('wall.views.index'))
 
