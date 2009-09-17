@@ -3,6 +3,15 @@
 import os
 import sys
 
+import subprocess
+import signal
+
+
+TIMEOUT = 60 * 10
+
+exec_path = '/home/sio4/works/ongsung/ongsung.km/trunk'
+exec_name = 'tunneld'
+
 
 def daemonize():
 	"""
@@ -28,13 +37,47 @@ def daemonize():
 	os.close(null)
 
 
-exec_path = '/home/sio4/works/ongsung/ongsung.km/trunk'
-exec_name = 'tunneld.static'
+def sig_alarm(signum,frame):
+	global TIMEOUT, proc
+	print "sig_alarm: " + "..." + str(proc)
+	# set next timeout... signal.alarm(TIMEOUT)
 
-#command = 'xterm -e "%s/%s %s %s %s %s"' % (exec_path, exec_name,
+def exit_with_child(child):
+	killproc = subprocess.Popen(['kill', str(child.pid)])
+	killproc.wait()
+	print 'child maybe daed. exit'
+	exit()
+
+
+##############################################################################
+#
+# main program:
+
 command = '%s/%s %s %s %s %s' % (exec_path, exec_name,
 		sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 
 daemonize()
-os.system(command);
+
+proc = subprocess.Popen(command.split(),
+		stdin=subprocess.PIPE,
+		stdout=subprocess.PIPE)
+
+signal.signal(signal.SIGALRM, sig_alarm)
+signal.alarm(TIMEOUT)
+
+while True:
+	#proc.stdin.write('username\n')
+	#proc.stdin.write('password\n')
+	try:
+		output = proc.stdout.readline()
+	except:
+		exit_with_child(proc)
+		continue
+
+	if not output:
+		break
+	print "====---- " + output.rstrip()
+
+proc.communicate()
+
 
