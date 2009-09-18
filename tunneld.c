@@ -42,8 +42,10 @@
 # define COLOR_NORMAL ""
 #endif
 
-//#define DEBUG(args)	printf args
+#define DEBUG(args)	printf args
+#ifndef DEBUG
 #define DEBUG(args)
+#endif
 
 struct conn_t {
 	const char *name;
@@ -55,11 +57,12 @@ struct conn_t {
 void os_log(char *format, ...) {
 	va_list ap;
 
-	fprintf(stderr, "LOG: ");
+	fprintf(stdout, "os_log: ");
 	va_start(ap, format);
-	vfprintf(stderr, format, ap);
+	vfprintf(stdout, format, ap);
 	va_end(ap);
-	fprintf(stderr, "\n");
+	fprintf(stdout, "\n");
+	fflush(stdout);
 }
 
 static const char *get_cmd(unsigned char cmd) {
@@ -179,7 +182,7 @@ static void _send(int sock, const char *buffer, size_t size) {
 	}
 }
 
-#define BUFFER_SIZE 80
+#define BUFFER_SIZE 160
 
 char x_cmd[BUFFER_SIZE + 1] = "";
 int ind;
@@ -188,6 +191,7 @@ int ind;
 static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 		void *user_data) {
 	struct conn_t *conn = (struct conn_t*)user_data;
+	register int i;
 
 	switch (ev->type) {
 	/* data received */
@@ -196,8 +200,13 @@ static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 		print_buffer(ev->buffer, ev->size);
 		DEBUG((COLOR_NORMAL "\n"));
 
-		if (strchr(conn->name, 'C')) {
-			if ((char)ev->buffer[0] == 0x0D) {
+		telnet_send(&conn->remote->telnet, ev->buffer, ev->size);
+		if (strchr(conn->name, 'S')) {	/* do nothing for server */
+			break;
+		}
+
+		for (i = 0; i < ev->size; i++) {
+			if ((char)ev->buffer[i] == 0x0D) {
 				os_log("cmd: %s,%d",
 						x_cmd, (int)strlen(x_cmd));
 				x_cmd[0] = '\0';
@@ -207,14 +216,13 @@ static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 				 * especially for screen mode.
 				 */
 				os_log("cmd: %s:CONT,%d",
-						x_cmd, (int)strlen(x_cmd));
-				sprintf(x_cmd, "CONT:%c", (char)ev->buffer[0]);
+						 x_cmd, (int)strlen(x_cmd));
+				sprintf(x_cmd, "CONT:%c", (char)ev->buffer[i]);
 			} else {
-				sprintf(x_cmd,"%s%c",x_cmd,(char)ev->buffer[0]);
+				sprintf(x_cmd,"%s%c",x_cmd,(char)ev->buffer[i]);
 			}
 		}
 
-		telnet_send(&conn->remote->telnet, ev->buffer, ev->size);
 		break;
 	/* data must be sent */
 	case TELNET_EV_SEND:
