@@ -79,4 +79,5 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'ongsung.wall',
     'ongsung.queman',
+    'ongsung.logger',
 )

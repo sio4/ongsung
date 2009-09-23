@@ -1,0 +1,11 @@
+
+<table>
+{% for log in logs %}
+<tr>
+<td>{{ log.session }}</td>
+<td>{{ log.serial }}</td>
+<td>{{ log.statement }}</td>
+<td>{{ log.time }}</td>
+</tr>
+{% endfor %}
+</table>

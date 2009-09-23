@@ -49,6 +49,23 @@ def exit_with_child(child):
 	exit()
 
 
+import httplib, urllib
+
+webhost = 'localhost:8000'
+
+def logger_query(log, prio, serial, uuid):
+	params = urllib.urlencode({'statement':log, 'priority':prio,
+		'session':uuid, 'serial':serial})
+	headers = {"Content-type":"application/x-www-form-urlencoded"}
+	conn = httplib.HTTPConnection(webhost)
+	conn.request("POST", "/logger/insert/", params, headers)
+	response = conn.getresponse()
+	data = response.read()
+	conn.close()
+
+	return response.status,data.split()[0],data.split()[1]
+
+
 ##############################################################################
 #
 # main program:
@@ -65,6 +82,10 @@ proc = subprocess.Popen(command.split(),
 signal.signal(signal.SIGALRM, sig_alarm)
 signal.alarm(TIMEOUT)
 
+ret = logger_query("ready to start...", 'L', 0, 'new')
+session = ret[1]
+serial = 0
+
 while True:
 	#proc.stdin.write('username\n')
 	#proc.stdin.write('password\n')
@@ -76,8 +97,15 @@ while True:
 
 	if not output:
 		break
-	print "====---- " + output.rstrip()
 
-proc.communicate()
+	if output.find('os_log') != 0:
+		continue
+
+	serial += 1
+
+	print "====---- " + output.rstrip()
+	logger_query(output.rstrip(), 'L', serial, session)
+
+#proc.communicate()
 
 
