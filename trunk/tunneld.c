@@ -210,6 +210,9 @@ static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 				os_log("cmd: %s,%d",
 						x_cmd, (int)strlen(x_cmd));
 				x_cmd[0] = '\0';
+				if ((char)ev->buffer[i+1] == 0x0A) {
+					i++;
+				}
 				/* add some start mark for nature one? */
 			} else if (strlen(x_cmd) >= (BUFFER_SIZE)) {
 				/* add :CONT: sign to very long line.
