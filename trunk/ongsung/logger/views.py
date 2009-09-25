@@ -8,7 +8,16 @@ from django.core.urlresolvers import reverse
 
 
 def index(request, template='logger.html'):
-	logs = Log.objects.all()
+	q = request.GET.get('q', '')
+	if q is not '':
+		logs = Log.objects.filter(statement__contains=q)
+	else:
+		logs = Log.objects.all()
+
+	if ('csv' == request.GET.get('format', '')):	# rfc4180
+		return render_to_response('logger.csv', {'logs':logs},
+				mimetype='text/csv')
+
 	return render_to_response(template, {'logs':logs})
 
 

@@ -1,0 +1,4 @@
+serial,statement,time,session,context,loghost
+{% for log in logs %}
+{{ log.serial }},"{{ log.statement }}",{{ log.time|date:"Y-m-d H:i:s" }},{{ log.session.uuid }},"{{ log.session.context }}",{{ log.session.host.addr }}
+{% endfor %}

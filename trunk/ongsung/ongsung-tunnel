@@ -5,6 +5,9 @@ import sys
 
 import subprocess
 import signal
+import httplib, urllib
+
+webhost = 'localhost'
 
 
 TIMEOUT = 60 * 10
@@ -49,12 +52,10 @@ def exit_with_child(child):
 	exit()
 
 
-import httplib, urllib
 
-webhost = 'localhost:8000'
-
-def logger_query(log, prio, serial, uuid):
+def logger_query(log, prio, serial, uuid, context):
 	params = urllib.urlencode({'statement':log, 'priority':prio,
+		'context':context,
 		'session':uuid, 'serial':serial})
 	headers = {"Content-type":"application/x-www-form-urlencoded"}
 	conn = httplib.HTTPConnection(webhost)
@@ -70,8 +71,14 @@ def logger_query(log, prio, serial, uuid):
 #
 # main program:
 
+context = sys.argv[1]
+target_addr = sys.argv[2]
+target_port = sys.argv[3]
+client_addr = sys.argv[4]
+tunnel_port = sys.argv[5]
+
 command = '%s/%s %s %s %s %s' % (exec_path, exec_name,
-		sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+		target_addr, target_port, client_addr, tunnel_port)
 
 daemonize()
 
@@ -82,7 +89,9 @@ proc = subprocess.Popen(command.split(),
 signal.signal(signal.SIGALRM, sig_alarm)
 signal.alarm(TIMEOUT)
 
-ret = logger_query("ready to start...", 'L', 0, 'new')
+target = sys.argv[1]
+
+ret = logger_query("request log session...", 'L', 0, 'new', context)
 session = ret[1]
 serial = 0
 
@@ -104,8 +113,10 @@ while True:
 	serial += 1
 
 	print "====---- " + output.rstrip()
-	logger_query(output.rstrip(), 'L', serial, session)
+	logger_query(output.rstrip(), 'L', serial, session, context)
 
+
+ret = logger_query("log session finished...", 'L', 0, session, context)
 #proc.communicate()
 
 
