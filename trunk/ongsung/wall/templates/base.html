@@ -46,6 +46,7 @@
 			#valid-w3c { text-align: center; }
 
 			#content { overflow: hidden; min-height: 200pt; padding-bottom: 50px; }
+			#content h3 { margin: 10px 0 0; }
 			#msgbox { background:#ffa;border:2px solid #990;padding:20px;margin:15px;}
 			#errbox { background:#faf;border:2px solid #909;padding:20px;margin:15px;}
 
@@ -54,7 +55,7 @@
 			#header { border-bottom: 5px solid #588faa; }
 			#footer { border-top: 1px solid #588faa; text-align: center; }
 
-			h1#main-title { margin-bottom: 2px; }
+			h1#main-title { margin: 2px 0; }
 			h5#tagline { margin: 0px; padding-left: 10px; }
 
 			table.device-list tr.device-item:hover, table.device-list a:hover {
@@ -74,6 +75,9 @@
 			}
 			/*]]>*/
 		</style>
+		<!--[if lt IE 7]>
+		<script type="text/javascript" src="statics/unitpngfix.js"></script>
+		<![endif]-->
 	</head>
 
 	<body>
@@ -118,7 +122,13 @@
 			{% if message %}
 			<div id="msgbox">{{ message }}</div>
 			{% endif %}
+			<!--[if lt IE 7]>
+			<div style="width: 700px;">
+			<![endif]-->
 		{% block content %}{% endblock %}
+			<!--[if lt IE 7]>
+			</div>
+			<![endif]-->
 		</div>
 		<div id="footer" class="frame">
 			ongsung 0.9 &copy; 2009 The Ongsung Project.
