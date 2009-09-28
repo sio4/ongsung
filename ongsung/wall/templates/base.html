@@ -45,7 +45,7 @@
 			#sidebar { border-left: 1px solid #79aac0; }
 			#valid-w3c { text-align: center; }
 
-			#content { overflow: hidden; min-height: 200pt; padding-bottom: 50px; }
+			#content { overflow: hidden; min-height: 200pt; padding-bottom: 20px; }
 			#content h3 { margin: 10px 0 0; }
 			#msgbox { background:#ffa;border:2px solid #990;padding:20px;margin:15px;}
 			#errbox { background:#faf;border:2px solid #909;padding:20px;margin:15px;}
@@ -69,6 +69,18 @@
 
 			div#connect_form { text-align: center; }
 			div#connect_form form input { border: 1px solid #002a52; }
+			div#login-info ul { float: right; margin: 0; }
+			div#login-info ul li { display: inline; margin-left: 15px; }
+
+			div.help-pack {
+				margin: 2px 2px 20px;
+				padding: 2px;
+				border-top: 2px dotted #79aac0;
+				background: #e4edf1;
+			}
+			div.help-pack h5 {margin: 0; text-align: right; float: left; }
+			div.help-pack ul { margin: 0; padding: 0; display: inline; }
+			div.help-pack ul li { margin-left: 15px; display: inline; }
 
 			@media print{
 				#sidebar { display: none; }
@@ -82,38 +94,22 @@
 
 	<body>
 		<div id="header" class="frame">
+			<div id="login-info">
+				{% if user.is_authenticated %}
+				<ul>
+					<li>Welcome, {{ user.username }}</li>
+					<li>Preference</li>
+					<li>Logout</li>
+				</ul>
+				{% endif %}
+			</div>
 			<h1 id="main-title"><a href="/ongsung/">Ongsung</a></h1>
 			<h5 id="tagline">secure gateway</h5>
 		</div>
-		<div id="sidebar" class="frame">
 		{% block sidebar %}
-		{% if user.is_authenticated %}
-			<p>Welcome, {{ user.username }}</p>
-			<ul id="side-meta">
-				<li>Preference</li>
-				<li>Logout</li>
-			</ul>
-		{% endif %}
-			<ul id="side-basic">
-				<li><a href="/">Home</a></li>
-			</ul>
-		{% if user.is_authenticated %}
-			<h5>Register for IE7</h5>
-			<ul id="side-ie7-helper">
-				<li><a href="statics/enable-telnet-ie7.reg">Enable telnet</a></li>
-				<li><a href="statics/telnet-handler-default.reg">Default</a></li>
-				<li><a href="statics/telnet-handler-putty.reg">Putty</a></li>
-			</ul>
-			<h5>Download putty directly</h5>
-			<ul id="putty-download">
-				<li><a href="statics/putty.exe">putty.exe</a></li>
-				<li><a href="statics/putty-licence.txt">putty license</a></li>
-				<li><a href="statics/putty-url.txt">putty url</a></li>
-			</ul>
-			<p>putty is distributed under MIT license. (GPL compatable)</p>
-		{% endif %}
+		<!--div id="sidebar" class="frame">
+		</div-->
 		{% endblock %}
-		</div>
 
 		<div id="content" class="frame">
 			{% if error %}
@@ -122,21 +118,32 @@
 			{% if message %}
 			<div id="msgbox">{{ message }}</div>
 			{% endif %}
-			<!--[if lt IE 7]>
-			<div style="width: 700px;">
-			<![endif]-->
-		{% block content %}{% endblock %}
-			<!--[if lt IE 7]>
-			</div>
-			<![endif]-->
+			{% block content %}{% endblock %}
 		</div>
+
+		<div id="bottom" class="frame">
+		{% if user.is_authenticated %}
+		<div class="help-pack">
+			<h5>Help :</h5>
+			<ul id="side-ie7-helper">
+				<li><a href="statics/enable-telnet-ie7.reg">enable telnet://</a></li>
+				<li><a href="statics/telnet-handler-putty.reg">set putty as terminal emulator</a></li>
+				<li><a href="statics/telnet-handler-default.reg">use default telnet emulator</a></li>
+				<li><a href="statics/putty.exe">download putty</a></li>
+			</ul>
+		</div>
+		{% endif %}
+		</div>
+
 		<div id="footer" class="frame">
 			ongsung 0.9 &copy; 2009 The Ongsung Project.
 		<p id="valid-w3c">
 			<a href="http://validator.w3.org/check?uri=referer"><img
+				class="unitPng"
 				src="http://www.w3.org/Icons/valid-xhtml10-blue"
 				alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a>
 			<a href="http://jigsaw.w3.org/css-validator/check/referer"><img
+				class="unitPng"
 				src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
 				style="border:0;width:88px;height:31px"
 				alt="Valid CSS 2.1!" /></a>
