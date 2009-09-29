@@ -10,7 +10,7 @@ info_dict = {
 
 urlpatterns = patterns('',
 	(r'^$', 'logger.views.index'),
-	(r'^logs/', object_list, info_dict),
+	(r'^log/', object_list, info_dict),
 	# default CRUD
 	(r'^insert/$', 'logger.views.insert'),
 	#(r'^add/$', 'logger.views.create'),			# POST, create
