@@ -12,9 +12,9 @@ from django.views.generic.list_detail import object_list
 def index(request, page=1, template='logger/log_list.html'):
 	q = request.GET.get('q', '')
 	c = request.GET.get('c', '')
-	if q is not '':
+	if q.__len__():
 		logs = Log.objects.filter(statement__contains=q)
-	elif c is not '':
+	elif c.__len__():
 		logs = Log.objects.filter(session__context__contains=c)
 	else:
 		logs = Log.objects.all()
