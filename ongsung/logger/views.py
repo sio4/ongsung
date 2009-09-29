@@ -2,6 +2,8 @@
 
 from logger.models import *
 
+from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
@@ -9,7 +11,11 @@ from django.core.urlresolvers import reverse
 from django.views.generic.list_detail import object_list
 
 
+@login_required
 def index(request, page=1, template='logger/log_list.html'):
+	if not request.user.is_staff:
+		return redirect_to_login(request.META.get('PATH_INFO','/admin'))
+
 	q = request.GET.get('q', '')
 	c = request.GET.get('c', '')
 	if q.__len__():
@@ -54,7 +60,11 @@ def insert(request):
 
 
 
+@login_required
 def session_detail(request, session_id, template='logger/session_detail.html'):
+	if not request.user.is_staff:
+		return redirect_to_login(request.META.get('PATH_INFO','/admin'))
+
 	if session_id:
 		sess = Session.objects.get(pk=session_id)
 	else:
