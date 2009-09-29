@@ -30,6 +30,7 @@
 		#query-form { text-align: center; margin: 10px; }
 		#query-form input { color: #666; border: 1px solid #999; }
 		#query-form input { background: #f0f0f0; }
+		#export-this { text-align: right; }
 	</style>
 {% endblock %}
 
@@ -78,8 +79,12 @@
 
 	<div id="page-navigation">
 	{% for p in page_range %}
-		<a href="?q={{ query }}&page={{ p }}">{{ p }}</a>
+	<a href="?q={{ query }}&c={{ context }}&page={{ p }}">{{ p }}</a>
 	{% endfor %}
+	</div>
+
+	<div id="export-this">
+	export as <a href="?q={{ query }}&c={{ context }}&format=csv">CSV</a>
 	</div>
 
 {% endblock %}
