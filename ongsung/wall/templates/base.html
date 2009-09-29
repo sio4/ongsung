@@ -100,7 +100,7 @@
 				<ul>
 					<li>Welcome, {{ user.username }}</li>
 					<li>Preference</li>
-					<li>Logout</li>
+					<li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
 				</ul>
 				{% endif %}
 			</div>
