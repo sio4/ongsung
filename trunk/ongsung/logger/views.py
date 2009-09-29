@@ -6,19 +6,25 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 
+from django.views.generic.list_detail import object_list
 
-def index(request, template='logger.html'):
+
+def index(request, page=1, template='logger/log_list.html'):
 	q = request.GET.get('q', '')
+	c = request.GET.get('c', '')
 	if q is not '':
 		logs = Log.objects.filter(statement__contains=q)
+	elif c is not '':
+		logs = Log.objects.filter(session__context__contains=c)
 	else:
 		logs = Log.objects.all()
 
 	if ('csv' == request.GET.get('format', '')):	# rfc4180
-		return render_to_response('logger.csv', {'logs':logs},
+		return render_to_response('logger/log_list.csv', {'logs':logs},
 				mimetype='text/csv')
 
-	return render_to_response(template, {'logs':logs})
+	return object_list(request, queryset=logs, paginate_by=20, page=page,
+			extra_context = {'query': q, 'context': c })
 
 
 
@@ -47,3 +53,13 @@ def insert(request):
 	return HttpResponse(content=content, status=202)
 
 
+
+def session_detail(request, session_id, template='logger/session_detail.html'):
+	if session_id:
+		sess = Session.objects.get(pk=session_id)
+	else:
+		return HttpResponse(status=404)
+
+	logs = Log.objects.filter(session=sess)
+
+	return render_to_response(template, {'session':sess, 'logs':logs})
