@@ -18,5 +18,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^djadmin/(.*)', admin.site.root),
+    (r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
+    (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
     (r'^accounts/login/$', 'django.contrib.auth.views.login')
 )
