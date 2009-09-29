@@ -19,11 +19,13 @@ def index(request, page=1, template='logger/log_list.html'):
 	q = request.GET.get('q', '')
 	c = request.GET.get('c', '')
 	if q.__len__():
-		logs = Log.objects.filter(statement__contains=q)
+		logs = Log.objects.filter(
+				statement__contains=q).order_by('-time')
 	elif c.__len__():
-		logs = Log.objects.filter(session__context__contains=c)
+		logs = Log.objects.filter(
+				session__context__contains=c).order_by('-time')
 	else:
-		logs = Log.objects.all()
+		logs = Log.objects.all().order_by('-time')
 
 	if ('csv' == request.GET.get('format', '')):	# rfc4180
 		return render_to_response('logger/log_list.csv', {'logs':logs},
