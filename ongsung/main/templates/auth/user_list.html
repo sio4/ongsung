@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+
+{% block title %}All Logs{% endblock %}
+
+
+{% block style %}
+	<style>
+		table#log_list { width: 100%; }
+		table#log_list tr,
+		table#log_list tr td,
+		table#log_list tr th {
+			background: transparent;
+			color: #666;
+			font-size: 10pt;
+			padding: 2 6 0 6;
+			border-bottom: 1px solid #ddd;
+			padding: 1px 5px 0;
+		}
+		table#log_list tr td.statement {
+			text-align: left;
+		}
+		#page-nav { float: right; margin-top: 15px; }
+		#page-navigation {
+			margin-top: 15px;
+			padding-top: 3px;
+			border-top: 1px solid #ddd;
+			text-align: center;
+		}
+		#query-form { text-align: center; margin: 10px; }
+		#query-form input { color: #666; border: 1px solid #999; }
+		#query-form input { background: #f0f0f0; }
+		table#create-form { margin-top: 20px;}
+		#create-form tr { background: inherit; }
+		#create-form input { color: #666; border: 1px solid #999; }
+		#create-form input { background: #f0f0f0; }
+		#create-form td, #create-form th { border: 0; padding-left: 20px; }
+		#more-options { text-align: right; margin-top: 10px;}
+	</style>
+{% endblock %}
+
+
+{% block content %}
+	<h1>All Logs</h1>
+	<table id="log_list">
+		<tr>
+			<th>id</th>
+			<th>name</th>
+			<th>mail address</th>
+			<th>active</th>
+			<th>staff</th>
+			<th>last login</th>
+			<th>joined</th>
+			<th>delete</th>
+		</tr>
+		<tr id="query-form">
+		<form method="GET" action="">
+			<td><input size=10 name="id" value="{{ id }}"></td>
+		</form>
+		<form method="GET" action="">
+			<td><input size=20 name="name" value="{{ name }}"></td>
+		</form>
+			<td>:</td>
+			<td>:</td>
+			<td>:</td>
+			<td>:</td>
+			<td>:</td>
+			<td>:</td>
+		</tr>
+		</form>
+		{% for u in object_list %}
+		<tr>
+			<td><a href="/admin/user/{{ u.id }}">{{ u.username }}</a></td>
+			<td>{{ u.get_full_name }}</td>
+			<td>{{ u.email }}</td>
+			<td>
+			{% if u.is_active %}
+			<img src="/media/img/admin/icon-yes.gif">
+			{% else %}
+			<img src="/media/img/admin/icon-no.gif">
+			{% endif %}
+			</td>
+			<td>
+			{% if u.is_staff %}
+			<a href=""><img src="/media/img/admin/icon-yes.gif"></a>
+			{% else %}
+			<a href=""><img src="/media/img/admin/icon-no.gif"></a>
+			{% endif %}
+			</td>
+			<td>{{ u.last_login|date:"Y-m-d H:i:s" }}</td>
+			<td>{{ u.date_joined|date:"Y-m-d H:i:s" }}</td>
+			<td><a href="/admin/user/{{ u.id }}/delete/">delete</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<div id="page-nav">
+	{% if has_previous %}<a href="?page={{ previous }}">Prev</a>{% else %}Prev{% endif %}
+	|
+	{% if has_next %}<a href="?page={{ next }}">Next</a>{% else %}Next{% endif %}
+	</div>
+
+	<div id="page-navigation">
+	{% for p in page_range %}
+	<a href="?q={{ query }}&c={{ context }}&page={{ p }}">{{ p }}</a>
+	{% endfor %}
+	</div>
+
+	<div id="more-options">
+		<div>
+			<a href="{% url main.views.user_create %}">New User</a>
+		</div>
+		<div>
+			export list as <a href="?q={{ query }}&c={{ context }}&format=csv">CSV</a>
+		</div>
+	</div>
+
+	<table id="create-form">
+		<tr>
+			<form method="POST" action="{% url main.views.user_create %}">
+			<th>Add: </th>
+			<td>username: <input size=10 name="username" value=""></td>
+			<td>first_name: <input size=10 name="first_name" value=""></td>
+			<td>last_name: <input size=10 name="last_name" value=""></td>
+			<td>password: <input type="password" size=10 name="password1"></td>
+			<td>confirm: <input type="password" size=10 name="password2"></td>
+			<td><input type="submit" value="create"></td>
+			</form>
+		</tr>
+	</table>
+{% endblock %}

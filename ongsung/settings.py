@@ -77,6 +77,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'ongsung.main',
     'ongsung.wall',
     'ongsung.queman',
     'ongsung.logger',
