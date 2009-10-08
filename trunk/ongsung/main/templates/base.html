@@ -16,7 +16,7 @@
 				margin: 0;
 				font-family: "Trebuchet MS";
 				font-size: 10pt;
-				color: #002850;
+				color: #000;
 				background-image: url('/media/images/moyang-background.png');
 				background-repeat: no-repeat;
 				background-position: bottom left;
@@ -32,14 +32,14 @@
 			td,th { border-bottom: 1px solid #347392; padding: 0; }
 			td,th { text-align: center; }
 			table.device-list a {display: block; width: 100%; }
-			a,a:visited {color: #002850; } /* for IE7 */
+			a,a:visited {color: #000; } /* for IE7 */
 			a,a:visited {color: inherit; text-decoration: none; }
 			ul { list-style: square; }
 			img { border: 0px; }
 
 			/* classes */
 			div.frame { padding: 10px 20px; }
-			div.box { background: #888; border: 2px solid #444; padding: 10px; }
+			div.box { background: #bbb; border: 2px solid #888; padding: 10px; }
 
 			#sidebar { float: right; min-height: 200pt; width: 200px; }
 			#sidebar { border-left: 1px solid #aaa; }
@@ -63,6 +63,7 @@
 			}
 
 			div#login_form { margin: auto; width: 25em; text-align: center; }
+			div#login_form { border: 0; background: inherit; margin-top: 90px;}
 			div#login_form div { margin:4px; background:transparent;}
 			div#login_form label { width: 9em; float:left; text-align: right; }
 			div#login_form form input { border: 1px solid #002a52; margin-left: 4px;}
@@ -106,8 +107,9 @@
 			{% if user.is_staff %}
 			<div class="login-info">
 				<ul>
-				<li><a href="/admin/">Admin</a></li>
 				<li><a href="/admin/log/">Search on Log</a></li>
+				<li><a href="/admin/user/">Users</a></li>
+				<li><a href="/admin/device/">Devices</a></li>
 				</ul>
 			</div>
 			{% endif %}

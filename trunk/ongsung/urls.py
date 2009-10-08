@@ -20,5 +20,6 @@ urlpatterns = patterns('',
     (r'^djadmin/(.*)', admin.site.root),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
-    (r'^accounts/login/$', 'django.contrib.auth.views.login')
+    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
+		(r'^accounts/profile/$', redirect_to, {'url':'/ongsung'}),
 )
