@@ -28,7 +28,7 @@
 			h3 { font-size: 150%; }
 			h4 { font-size: 130%; }
 			h5 { font-size: 110%; margin-bottom: 1em; }
-			tr { background: #e4edf1; }
+			tr { background: #eee; }
 			td,th { border-bottom: 1px solid #347392; padding: 0; }
 			td,th { text-align: center; }
 			table.device-list a {display: block; width: 100%; }
@@ -39,10 +39,10 @@
 
 			/* classes */
 			div.frame { padding: 10px 20px; }
-			div.box { background: #588faa; border: 2px solid #084168; padding: 10px; }
+			div.box { background: #888; border: 2px solid #444; padding: 10px; }
 
 			#sidebar { float: right; min-height: 200pt; width: 200px; }
-			#sidebar { border-left: 1px solid #79aac0; }
+			#sidebar { border-left: 1px solid #aaa; }
 			#valid-w3c { text-align: center; }
 
 			#content { overflow: hidden; min-height: 200pt; padding-bottom: 20px; }
@@ -50,16 +50,16 @@
 			#msgbox { background:#ffa;border:2px solid #990;padding:20px;margin:15px;}
 			#errbox { background:#faf;border:2px solid #909;padding:20px;margin:15px;}
 
-			#header { border-bottom:1px solid #588faa;background:#084168;color:white;}
+			#header { border-bottom:1px solid #888;background:#444;color:white;}
 			#header a, #header a:visited { color:white; }
-			#header { border-bottom: 5px solid #588faa; }
-			#footer { border-top: 1px solid #588faa; text-align: center; }
+			#header { border-bottom: 5px solid #888; }
+			#footer { border-top: 1px solid #888; text-align: center; }
 
 			h1#main-title { margin: 2px 0; }
 			h5#tagline { margin: 0px; padding-left: 10px; }
 
 			table.device-list tr.device-item:hover, table.device-list a:hover {
-				background: #588faa; color: white;
+				background: #888; color: white;
 			}
 
 			div#login_form { margin: auto; width: 25em; text-align: center; }
@@ -69,14 +69,18 @@
 
 			div#connect_form { text-align: center; }
 			div#connect_form form input { border: 1px solid #002a52; }
-			div#login-info ul { float: right; margin: 0; }
-			div#login-info ul li { display: inline; margin-left: 15px; }
+			div.login-info { float: right; margin: 0; }
+			div.login-info { background: inherit; border: 0; }
+			div.login-info { border: 0; padding-left: 15px; }
+			div.login-info ul { margin: 0; padding: 0; }
+			div.login-info ul { list-style: none; }
+			div.login-info ul li { margin-left: 1px; }
 
 			div.help-pack {
 				margin: 2px 2px 20px;
 				padding: 2px;
-				border-top: 2px dotted #79aac0;
-				background: #e4edf1;
+				border-top: 2px dotted #aaa;
+				background: #eee;
 			}
 			div.help-pack h5 {margin: 0; text-align: right; float: left; }
 			div.help-pack ul { margin: 0; padding: 0; display: inline; }
@@ -95,16 +99,21 @@
 
 	<body>
 		<div id="header" class="frame">
-			<div id="login-info">
-				{% if user.is_authenticated %}
-				<ul>
-					<li>Welcome, {{ user.username }}</li>
-					<li>Preference</li>
-					{% if user.is_staff %}<li><a href="/admin/">admin</a></li>{% endif %}
-					<li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
-				</ul>
-				{% endif %}
+			{% if user.is_authenticated %}
+			<div class="login-info">
+				<a href="{% url django.contrib.auth.views.logout %}">Logout</a>
 			</div>
+			{% if user.is_staff %}
+			<div class="login-info">
+				<ul>
+				<li><a href="/admin/">Admin</a></li>
+				<li><a href="/admin/log/">Search on Log</a></li>
+				</ul>
+			</div>
+			{% endif %}
+			<div class="login-info">Preference</div>
+			<div class="login-info">Welcome, {{ user.username }}</div>
+			{% endif %}
 			<h1 id="main-title"><a href="/ongsung/">Ongsung</a></h1>
 			<h5 id="tagline">secure gateway</h5>
 		</div>
