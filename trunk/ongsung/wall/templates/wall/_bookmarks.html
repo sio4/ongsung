@@ -11,7 +11,7 @@
 {% for o in objects %}
 <tr class="device-item">
 <td><a href="{% url wall.views.stared bookmark_id=o.id %}"><img class="unitPng"
-	src="statics/{% if o.stared %}goldstar{% else %}darkstar{% endif %}.png"
+	src="/media/images/{% if o.stared %}goldstar{% else %}darkstar{% endif %}.png"
 	alt="{% if o.stared %}*{% else %}_{% endif %}" /></a></td>
 <td><a href="{% url wall.views.conn device_id=o.device.id %}">{{ o }} ({{ o.device.addr }})</a></td>
 <td>{{ o.last_date }}</td>
