@@ -2,14 +2,27 @@
 
 {% block title %}My Ongsung{% endblock %}
 
+{% block style %}
+<style>
+	div#connect_form select { border: 1px dotted #bbb; }
+	div#connect_form form input { border: 1px dotted #bbb; }
+</style>
+{% endblock %}
+
+
 {% block content %}
 
 <div id="connect_form">
 <form method="post" action="connect/">
-	<div>
-	<label>conntect to: </label>
-	<input type="text" name="addr" value="" size="40" id="id_address" />
-	<input type="submit" value="open" />
+	<div>$ 
+	<select name=prot id="id_protocol">
+		{% for p in protocol %}
+		<option>{{ p.name }}</option>
+		{% endfor %}
+	</select>
+	<input type="text" name="addr" value="" size="20" id="id_address" /> :
+	<input type="text" name="port" value="" size="5" id="id_port" />
+	<input type="submit" value="enter!" />
 	</div>
 </form>
 </div>
