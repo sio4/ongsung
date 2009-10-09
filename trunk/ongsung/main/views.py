@@ -64,8 +64,16 @@ def user_detail(request, user_id, template='auth/user_detail.html'):
 	else:
 		return HttpResponse(status=404)
 
-	history = Session.objects.filter(context__contains=user.username)
+	sessions = Session.objects.filter(
+			context__contains=user.username).order_by('-time')
 
-	return render_to_response(template, {'user':user, 'history':history})
+	context = request.GET.get('context', '')
+	if context.__len__():
+		sessions = sessions.filter(context__contains=context)
+
+	page = request.GET.get('page', '1')
+
+	return object_list(request, queryset=sessions, paginate_by=5, page=page,
+			extra_context = {'xuser': user, 'context':context })
 
 
