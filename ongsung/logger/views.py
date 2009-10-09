@@ -5,6 +5,7 @@ from logger.models import *
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 
@@ -74,4 +75,7 @@ def session_detail(request, session_id, template='logger/session_detail.html'):
 
 	logs = Log.objects.filter(session=sess)
 
-	return render_to_response(template, {'session':sess, 'logs':logs})
+	return render_to_response(template,
+			{'session':sess, 'logs':logs},
+			context_instance=RequestContext(request),
+			)
