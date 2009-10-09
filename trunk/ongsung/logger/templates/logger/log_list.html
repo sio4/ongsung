@@ -65,7 +65,9 @@
 			<td class="statement">{{ log.statement }}</td>
 			<td>{{ log.time|date:"Y-m-d H:i:s" }}</td>
 			<td>{{ log.session.context }}</td>
-			<td><a href="/admin/session/{{ log.session.id }}">{{ log.session.uuid }}</a></td>
+			<td><a href="/admin/session/{{ log.session.id }}"
+					title="{{ log.session.uuid }}"
+					>{{ log.session.uuid|make_list|slice:":15"|join:"" }}...</a></td>
 			<td>{{ log.session.host.addr }}</td>
 		</tr>
 		{% endfor %}

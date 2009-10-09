@@ -38,8 +38,6 @@
 
 {% block content %}
 <h1>Session Detail</h1>
-
-<h3>Session Detail :</h3>
 <table id="detail">
 	<tr><td class="label">Start time</td>
 		<td class="content">{{ session.time|date:"Y-m-d H:i:s" }}</td></tr>
@@ -53,7 +51,7 @@
 		<td class="content">{{ session.context }}</td></tr>
 </table>
 
-<h3>Command Log :</h3>
+<h3>Command Log:</h3>
 <table id="log_list">
 	<tr>
 		<th>#</th>

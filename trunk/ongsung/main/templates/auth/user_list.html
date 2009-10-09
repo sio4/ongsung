@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 
-{% block title %}All Logs{% endblock %}
+{% block title %}User Management{% endblock %}
 
 
 {% block style %}
 	<style>
-		table#log_list { width: 100%; }
-		table#log_list tr,
-		table#log_list tr td,
-		table#log_list tr th {
+		table.log-list { width: 100%; }
+		table.log-list tr,
+		table.log-list tr td,
+		table.log-list tr th {
 			background: transparent;
 			color: #666;
 			font-size: 10pt;
@@ -41,8 +41,8 @@
 
 
 {% block content %}
-	<h1>All Logs</h1>
-	<table id="log_list">
+	<h1>User list</h1>
+	<table class="log-list">
 		<tr>
 			<th>id</th>
 			<th>name</th>
@@ -71,8 +71,8 @@
 		{% for u in object_list %}
 		<tr>
 			<td><a href="/admin/user/{{ u.id }}">{{ u.username }}</a></td>
-			<td>{{ u.get_full_name }}</td>
-			<td>{{ u.email }}</td>
+			<td>{{ u.get_full_name|default:"(None)" }} </td>
+			<td>{{ u.email|default:"(None)" }} </td>
 			<td>
 			{% if u.is_active %}
 			<img src="/media/img/admin/icon-yes.gif">
@@ -115,16 +115,26 @@
 		</div>
 	</div>
 
-	<table id="create-form">
+	<h2>Add New User:</h2>
+	<table class="log-list">
+		<tr>
+			<td>login name</td>
+			<td>first name</td>
+			<td>last name</td>
+			<td>e-mail address</td>
+			<td>password</td>
+			<td>confirm</td>
+			<td></td>
+		</tr>
 		<tr>
 			<form method="POST" action="{% url main.views.user_create %}">
-			<th>Add: </th>
-			<td>username: <input size=10 name="username" value=""></td>
-			<td>first_name: <input size=10 name="first_name" value=""></td>
-			<td>last_name: <input size=10 name="last_name" value=""></td>
-			<td>password: <input type="password" size=10 name="password1"></td>
-			<td>confirm: <input type="password" size=10 name="password2"></td>
-			<td><input type="submit" value="create"></td>
+			<td><input size=10 name="username" value=""></td>
+			<td><input size=5 name="first_name" value=""></td>
+			<td><input size=5 name="last_name" value=""></td>
+			<td><input size=20 name="email" value=""></td>
+			<td><input type="password" size=15 name="password1"></td>
+			<td><input type="password" size=15 name="password2"></td>
+			<td><input type="submit" value="Add"></td>
 			</form>
 		</tr>
 	</table>
