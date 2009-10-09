@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+
+{% block title %}User Info{% endblock %}
+
+
+{% block style %}
+	<style>
+		table#log_list { width: 100%; }
+		table#log_list tr,
+		table#log_list tr td,
+		table#log_list tr th {
+			background: transparent;
+			color: #666;
+			font-size: 10pt;
+			padding: 2 6 0 6;
+			border-bottom: 1px solid #ddd;
+			padding: 1px 5px 0;
+		}
+		table#log_list tr td.statement {
+			text-align: left;
+		}
+		#page-nav { float: right; margin-top: 15px; }
+		#page-navigation {
+			margin-top: 15px;
+			padding-top: 3px;
+			border-top: 1px solid #ddd;
+			text-align: center;
+		}
+		#query-form { text-align: center; margin: 10px; }
+		#query-form input { color: #666; border: 1px solid #999; }
+		#query-form input { background: #f0f0f0; }
+		#export-this { text-align: right; }
+	</style>
+{% endblock %}
+
+
+{% block content %}
+<h1>User '{{ xuser.username }}'</h1>
+<div>
+	<ul>
+		<li>{{ xuser.get_full_name }} ({{ xuser.username }}, {{ xuser.email }})</li>
+		{% if xuser.is_active %}
+		<li>Active User</li>
+		{% else %}
+		<li>Inactive User</li>
+		{% endif %}
+		{% if xuser.is_staff %}
+		<li>Staff</li>
+		{% else %}
+		<li>Not a staff</li>
+		{% endif %}
+		<li>Last Login: {{ xuser.last_login|date:"Y-m-d H:i:s" }}</li>
+		<li>Joined at: {{ xuser.date_joined|date:"Y-m-d H:i:s" }}</li>
+		<li><a href="/admin/user/{{ xuser.id }}/delete/">Delete this user</a></li>
+	</ul>
+</div>
+
+
+	<h2>Related Sessions:</h2>
+	<table id="log_list">
+		<tr>
+			<th>time</th>
+			<th>context</th>
+			<th>session id</th>
+			<th>log host</th>
+		</tr>
+		<tr id="query-form">
+			<td>:</td>
+		<form method="GET" action="">
+			<td><input size=10 name="context" value="{{ context }}"></td>
+		</form>
+			<td>:</td>
+			<td>:</td>
+		</tr>
+		</form>
+		{% for session in object_list %}
+		<tr>
+			<td>{{ session.time|date:"Y-m-d H:i:s" }}</td>
+			<td>{{ session.context }}</td>
+			<td><a href="/admin/session/{{ session.id }}">{{ session.uuid }}</a></td>
+			<td>{{ session.host.addr }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<div id="page-nav">
+		{% if has_previous %}<a href="?context={{ context }}&page={{ previous }}">Prev</a>{% else %}Prev{% endif %}
+	|
+	{% if has_next %}<a href="?context={{ context }}&page={{ next }}">Next</a>{% else %}Next{% endif %}
+	</div>
+
+	<div id="page-navigation">
+	{% for p in page_range %}
+	<a href="?context={{ context }}&page={{ p }}">{{ p }}</a>
+	{% endfor %}
+	</div>
+
+	<div id="export-this">
+	export as <a href="?context={{ context }}&format=csv">CSV</a>
+	</div>
+
+
+
+{% endblock %}

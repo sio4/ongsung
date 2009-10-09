@@ -21,9 +21,9 @@ urlpatterns = patterns('',
 	#(r'^session/([^/]+)/$', 'logger.views.session_detail'),
 	(r'^user/$', 'main.views.user_index'),
 	(r'^user/create/$', 'main.views.user_create'),
-	(r'^user/(?P<user_id>\w+)/$', 'main.views.user_detail'),
 	(r'^user/(?P<object_id>\w+)/delete/$', delete_object,
 		{'model':User,'post_delete_redirect':'/admin/user/'}),
+	(r'^user/(?P<user_id>\w+)/(.*)$', 'main.views.user_detail'),
 )
 
 
