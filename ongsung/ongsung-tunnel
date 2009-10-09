@@ -12,8 +12,8 @@ webhost = 'localhost'
 
 TIMEOUT = 60 * 10
 
-exec_path = '/home/sio4/works/ongsung/ongsung.km/trunk'
-exec_name = 'tunneld'
+exec_path = '@TUNNEL_EXEC_PATH@'
+exec_name = '@TUNNEL_EXEC_NAME@'
 
 
 def daemonize():
