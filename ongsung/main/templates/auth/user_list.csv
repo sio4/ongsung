@@ -1,0 +1,6 @@
+id,username,firstname,lastname,email,is_active,is_staff,last_login,date_joined
+{% for u in users %}{{ u.id }},{{ u.username }},"{{ u.first_name }}","{{ u.last_name }}",{{ u.email }},{{ u.is_active }},{{ u.is_staff }},{{ u.last_login }},{{ u.date_joined }}
+{% endfor %}
+
+
+
