@@ -52,32 +52,31 @@ def connect(request, device_id=None):
 	message = ''
 	error = ''
 
-	# select device to connect if possible.
-	try:
-		if request.META['REQUEST_METHOD'] == 'POST':
-			requested_addr = request.POST['addr'].split()[0]
-			d = Device.objects.filter(addr=requested_addr)[0]
-		elif request.META['REQUEST_METHOD'] == 'GET' and device_id:
-			d = Device.objects.get(pk=device_id)
-	except:
-		#error += "device selection error: unknown device or invalid."
-		#error += " contact to system administrator."
-		#
-		#request.session['message'] = message
-		#request.session['error'] = error
-		#return HttpResponseRedirect(reverse('wall.views.index'))
+	if request.META['REQUEST_METHOD'] == 'GET' and device_id:
+		d = Device.objects.get(pk=device_id)
+	elif request.META['REQUEST_METHOD'] == 'POST':
+		req_addr = request.POST.get('addr', '').strip()
+		req_port = request.POST.get('port', None).strip()
+		req_prot = request.POST.get('prot', 'telnet').strip()
 
-		addr = request.POST.get('addr', '')
-		port = request.POST.get('port', '')
-		prot = request.POST.get('prot', 'telnet')
-		d = Device(name=addr,addr=addr,prot=Protocol.objects.get(name=prot))
+		if req_addr == '':
+			error += "destination address is not given. ignore."
+			request.session['error'] = error
+			return HttpResponseRedirect(reverse('wall.views.index'))
+
 		try:
-			d.port = int(port)
+			d = Device.objects.filter(addr=req_addr)[0]
+			# FIXME Q:if we need more than one protocol for one host?
 		except:
-			pass
-		d.save()
-		message += ' New machine %s registered. ' % (d.addr)
+			# register device on-the-fly
+			prot=Protocol.objects.get(name=req_prot)
+			d = Device(name=req_addr,addr=req_addr,prot=prot)
+			if req_port:
+				d.port = int(req_port)
+			d.save()
+			message += ' New machine %s registered. ' % (d.addr)
 
+	### now prepare to invoke tunnel:
 	addr = d.addr
 	if d.port:
 		port = d.port
