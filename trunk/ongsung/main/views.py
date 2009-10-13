@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.models import User, Group
 from logger.models import Session
 
+from django.db.models import Q
 
 
 @login_required
@@ -23,9 +24,8 @@ def user_index(request, page=1, template='auth/user_list.html'):
 		users = User.objects.filter(
 				username__contains=id).order_by('username')
 	elif name.__len__():
-		users = User.objects.get(
-				Q(first_name__contains=name) |
-				Q(last_name__contains=name)
+		users = User.objects.filter(
+				Q(first_name__icontains=name) | Q(last_name__icontains=name)
 			)
 	else:
 		users = User.objects.all().order_by('username')
