@@ -46,6 +46,7 @@ def user_create(request):
 			user = form.save(commit=False)
 			user.first_name = request.POST.get('first_name', '')
 			user.last_name = request.POST.get('last_name', '')
+			user.email = request.POST.get('email', '')
 			user.is_active = True
 			user.is_staff = False
 			user.save()
