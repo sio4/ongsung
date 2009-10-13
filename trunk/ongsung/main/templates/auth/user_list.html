@@ -36,6 +36,7 @@
 		#create-form input { background: #f0f0f0; }
 		#create-form td, #create-form th { border: 0; padding-left: 20px; }
 		#more-options { text-align: right; margin-top: 10px;}
+		.current_page { color: #999; font-weight: bold; }
 	</style>
 {% endblock %}
 
@@ -102,7 +103,11 @@
 
 	<div id="page-navigation">
 	{% for p in page_range %}
+		{% ifequal p page %}
+	<span class="current_page">{{ p }}</span>
+		{% else %}
 	<a href="?q={{ query }}&c={{ context }}&page={{ p }}">{{ p }}</a>
+		{% endifequal %}
 	{% endfor %}
 	</div>
 
