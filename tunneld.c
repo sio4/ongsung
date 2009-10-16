@@ -188,6 +188,7 @@ static void _send(int sock, const char *buffer, size_t size) {
 /* additional 1-byte for safe '\0' */
 char s_cmd[BUFFER_SIZE + 1] = "";
 char c_cmd[BUFFER_SIZE + 1] = "";
+char prompt[BUFFER_SIZE] = "NONE";
 
 int os_logger(char source, const char *str, int len)
 {
@@ -210,7 +211,11 @@ int os_logger(char source, const char *str, int len)
 	for (i = 0; i < len; i++) {
 		//DEBUG(("icurrent char: (0x%02x)\n", str[i]));
 		if ((char)str[i] == 0x0D) {
-			os_log("%s%s,%d", dr, buffer, (int)strlen(buffer));
+			if (source == 'C' && !strncmp(prompt, "Password:", 9)) {
+				os_log("%sPASSWD PROTECTED (experimental)", dr);
+			} else {
+				os_log("%s%s,%d", dr, buffer, strlen(buffer));
+			}
 			buffer[0] = '\0';
 			if ((char)str[i+1] == 0x0A || (char)str[i+1] == 0x00) {
 				i++;
@@ -221,9 +226,16 @@ int os_logger(char source, const char *str, int len)
 
 		if (strlen(buffer) >= (BUFFER_SIZE)) {
 			/* print out current log string with mark: */
-			os_log("%s%s:CONT,%d", dr, buffer, (int)strlen(buffer));
+			os_log("%s%s:CONT,%d", dr, buffer, strlen(buffer));
 			sprintf(buffer, "CONT:");
 		}
+	}
+
+	if (source == 'S' && strlen(s_cmd)
+			&& strncmp(prompt, s_cmd, strlen(prompt))) {
+		os_log("_INFO: prompt changed from '%s' to '%s'.",
+				prompt, s_cmd);
+		sprintf(prompt, s_cmd);
 	}
 
 	return 0;
