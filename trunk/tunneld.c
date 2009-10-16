@@ -190,16 +190,19 @@ char s_cmd[BUFFER_SIZE + 1] = "";
 char c_cmd[BUFFER_SIZE + 1] = "";
 char prompt[BUFFER_SIZE] = "NONE";
 
+#define CLI	(source == 'C')
+#define SVR	(source == 'S')
+
 int os_logger(char source, const char *str, int len)
 {
 	register int i;
 	char *buffer = NULL;
 	char dr[5];
 
-	if (source == 'S') {
+	if (SVR) {
 		buffer = s_cmd;
 		sprintf(dr, "<<< ");
-	} else if (source == 'C') {
+	} else if (CLI) {
 		buffer = c_cmd;
 		sprintf(dr, ">>> ");
 	} else {
@@ -211,7 +214,7 @@ int os_logger(char source, const char *str, int len)
 	for (i = 0; i < len; i++) {
 		//DEBUG(("icurrent char: (0x%02x)\n", str[i]));
 		if ((char)str[i] == 0x0D) {
-			if (source == 'C' && !strncmp(prompt, "Password:", 9)) {
+			if (CLI && !strncmp(prompt, "Password:", 9)) {
 				os_log("%sPASSWD PROTECTED (experimental)", dr);
 			} else {
 				os_log("%s%s,%d", dr, buffer, strlen(buffer));
@@ -220,6 +223,11 @@ int os_logger(char source, const char *str, int len)
 			if ((char)str[i+1] == 0x0A || (char)str[i+1] == 0x00) {
 				i++;
 			}
+		} else if (CLI && str[i] == 0x7f) {
+			if (strlen(buffer)) {
+				buffer[strlen(buffer)-1] = '\0';
+			}
+			/* else ignore backspace to empty buffer */
 		} else {
 			sprintf(buffer, "%s%c", buffer, (char)str[i]);
 		}
@@ -231,8 +239,7 @@ int os_logger(char source, const char *str, int len)
 		}
 	}
 
-	if (source == 'S' && strlen(s_cmd)
-			&& strncmp(prompt, s_cmd, strlen(prompt))) {
+	if (SVR && strlen(s_cmd) && strncmp(prompt, s_cmd, strlen(prompt))) {
 		os_log("_INFO: prompt changed from '%s' to '%s'.",
 				prompt, s_cmd);
 		sprintf(prompt, s_cmd);
