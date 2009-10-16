@@ -42,8 +42,9 @@
 # define COLOR_NORMAL ""
 #endif
 
+#ifdef DEBUG_COMM
 #define DEBUG(args)	printf args
-#ifndef DEBUG
+#else
 #define DEBUG(args)
 #endif
 
@@ -184,14 +185,55 @@ static void _send(int sock, const char *buffer, size_t size) {
 
 #define BUFFER_SIZE 160
 
-char x_cmd[BUFFER_SIZE + 1] = "";
-int ind;
+/* additional 1-byte for safe '\0' */
+char s_cmd[BUFFER_SIZE + 1] = "";
+char c_cmd[BUFFER_SIZE + 1] = "";
+
+int os_logger(char source, const char *str, int len)
+{
+	register int i;
+	char *buffer = NULL;
+	char dr[5];
+
+	if (source == 'S') {
+		buffer = s_cmd;
+		sprintf(dr, "<<< ");
+	} else if (source == 'C') {
+		buffer = c_cmd;
+		sprintf(dr, ">>> ");
+	} else {
+		os_log("ERROR: unknown connection to log: %c", source);
+		return 1;
+	}
+
+	/* FIXME straight forward implementation. optimaziation needed. */
+	for (i = 0; i < len; i++) {
+		//DEBUG(("icurrent char: (0x%02x)\n", str[i]));
+		if ((char)str[i] == 0x0D) {
+			os_log("%s%s,%d", dr, buffer, (int)strlen(buffer));
+			buffer[0] = '\0';
+			if ((char)str[i+1] == 0x0A || (char)str[i+1] == 0x00) {
+				i++;
+			}
+		} else {
+			sprintf(buffer, "%s%c", buffer, (char)str[i]);
+		}
+
+		if (strlen(buffer) >= (BUFFER_SIZE)) {
+			/* print out current log string with mark: */
+			os_log("%s%s:CONT,%d", dr, buffer, (int)strlen(buffer));
+			sprintf(buffer, "CONT:");
+		}
+	}
+
+	return 0;
+}
+
 
 
 static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 		void *user_data) {
 	struct conn_t *conn = (struct conn_t*)user_data;
-	register int i;
 
 	switch (ev->type) {
 	/* data received */
@@ -201,30 +243,7 @@ static void _event_handler(telnet_t *telnet, telnet_event_t *ev,
 		DEBUG((COLOR_NORMAL "\n"));
 
 		telnet_send(&conn->remote->telnet, ev->buffer, ev->size);
-		if (strchr(conn->name, 'S')) {	/* do nothing for server */
-			break;
-		}
-
-		for (i = 0; i < ev->size; i++) {
-			if ((char)ev->buffer[i] == 0x0D) {
-				os_log("cmd: %s,%d",
-						x_cmd, (int)strlen(x_cmd));
-				x_cmd[0] = '\0';
-				if ((char)ev->buffer[i+1] == 0x0A) {
-					i++;
-				}
-				/* add some start mark for nature one? */
-			} else if (strlen(x_cmd) >= (BUFFER_SIZE)) {
-				/* add :CONT: sign to very long line.
-				 * especially for screen mode.
-				 */
-				os_log("cmd: %s:CONT,%d",
-						 x_cmd, (int)strlen(x_cmd));
-				sprintf(x_cmd, "CONT:%c", (char)ev->buffer[i]);
-			} else {
-				sprintf(x_cmd,"%s%c",x_cmd,(char)ev->buffer[i]);
-			}
-		}
+		os_logger(conn->name[0], ev->buffer, ev->size);
 
 		break;
 	/* data must be sent */
