@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+
+{% block title %}Roll Management{% endblock %}
+
+
+{% block style %}
+	<style>
+		table.fullsize { width: 100%; }
+		table.fullsize tr,
+		table.fullsize tr td,
+		table.fullsize tr th {
+			background: transparent;
+			color: #666;
+			font-size: 10pt;
+			padding: 2 6 0 6;
+			border-bottom: 1px dotted #eee;
+			padding: 1px 5px 0;
+		}
+		table.fullsize tr th { border-bottom: 1px dotted #777; }
+		input.text { border:0; background:#fafafa; border-bottom:1px solid #666; }
+		input.ra { text-align: right; }
+		input.button { text-align: center; width: 80px; }
+		#more-options { text-align: right; margin-top: 10px;}
+	</style>
+{% endblock %}
+
+
+{% block content %}
+	<h1>User list</h1>
+	<table class="fullsize">
+		<tr>
+			<th>Title</th>
+			<th>Link</th>
+			<th>Rank</th>
+			<th>Action</th>
+		</tr>
+		{% for r in rolls %}
+		<tr>
+			<form method="POST" action="{{ r.id }}/update/">
+				<td><input size=40 name="title" value="{{ r.title }}" class="text"></td>
+				<td><input size=50 name="link" value="{{ r.link }}" class="text"></td>
+				<td><input size=5 name="rank" value="{{ r.rank }}" class="text ra"></td>
+				<td>
+					<input type="submit" value="Update" class="button">
+					<input type="submit" value="Delete" class="button"
+					onclick="location.href='{{ r.id }}/delete/'; return false;" />
+				</td>
+			</form>
+		</tr>
+		{% endfor %}
+		<tr>
+			<form method="POST" action="create/">
+			<td><input size=40 name="title" value="" class="text"></td>
+			<td><input size=50 name="link" value="" class="text"></td>
+			<td><input size=5 name="rank" value="50" class="text ra"></td>
+			<td><input type="submit" value="Add" class="button"></td>
+			</form>
+		</tr>
+	</table>
+
+	<div id="more-options">
+		<div>
+			export list as <a href="?format=csv">CSV</a>
+		</div>
+	</div>
+
+{% endblock %}
