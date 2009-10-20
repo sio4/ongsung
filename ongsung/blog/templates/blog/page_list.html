@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+
+{% block title %}Blog{% endblock %}
+{% load markup %}
+
+
+{% block style %}
+	<style>
+		.page {
+			border-bottom: 1px dotted #999;
+			padding: 2px 15px;
+		}
+		h2.page-title { margin: 0; }
+		div.page-info { ; }
+		div.page-info-meta { float: right; }
+		div.page-content { padding: 5px; background: #f9f9f9; }
+		div.page-content h1,
+		div.page-content h2,
+		div.page-content h3,
+		div.page-content h4,
+		div.page-content h5 { margin-top: 4px; }
+		div.page-tags a { font-style: italic; }
+
+		a.p-unpri { font-weight: bold; color: #bbb; }
+		a.p-unsti { font-weight: bold; color: black; }
+		a.p-unpub { font-weight: bold; color: #955; }
+	</style>
+{% endblock %}
+
+
+{% block content %}
+	<div class='pages'>
+		{% for p in object_list %}
+		<div class='page'>
+			<div class='page-info'>
+				<h3 class='page-title'>{{ p.subject }}</h2>
+				{% ifequal user p.author %}
+				<div class='page-info-meta'>
+					{% if p.private %}
+					<a class='p-unpri' href="{{ p.id }}/update/?private=f">set public</a>
+					{% else %}
+					<a class='p-pri' href="{{ p.id }}/update/?private=t">set private</a>
+					{% endif %}
+					|
+					{% if p.published %}
+					<a class='p-unpub' href="{{ p.id }}/update/?published=f">unpublish</a>
+					{% else %}
+					<a class='p-pub' href="{{ p.id }}/update/?published=t">publish</a>
+					{% endif %}
+					|
+					{% if p.sticky %}
+					<a class='p-unsti' href="{{ p.id }}/update/?sticky=f">unset sticky</a>
+					{% else %}
+					<a class='p-sti' href="{{ p.id }}/update/?sticky=t">set sticky</a>
+					{% endif %}
+					|
+					<a href="{{ p.id }}/delete/">delete</a>
+				</div>
+				{% endifequal %}
+				<div class='page-info'>
+					Category: {{ p.category }}
+					Posted: {{ p.posted_at|date:"Y-m-d H:i:s" }}
+				</div>
+			</div>
+			<div class='page-content'>{{ p.content|textile }}</div>
+			<div class='page-tags'>
+					{% for t in p.tags %}
+					<a href=''>{{ t.name }}</a>
+					{% endfor %}
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+	<div id="page-nav">
+	{% if has_previous %}<a href="?page={{ previous }}">Prev</a>{% else %}Prev{% endif %}
+	|
+	{% if has_next %}<a href="?page={{ next }}">Next</a>{% else %}Next{% endif %}
+	</div>
+
+	<div id="page-navigation">
+	{% for p in page_range %}
+		{% ifequal p page %}
+	<span class="current_page">{{ p }}</span>
+		{% else %}
+	<a href="?query={{ query }}&page={{ p }}">{{ p }}</a>
+		{% endifequal %}
+	{% endfor %}
+	</div>
+
+	<div id="more-options">
+	</div>
+
+	{% if user.is_staff %}
+	<h2>Add New Page:</h2>
+	<table class="log-list">
+		<form method="POST" action="{% url blog.views.page_create %}">
+			<tbody>
+			<tr><td>Subject : <input size=50 name="subject"></td></tr>
+			<tr><td><textarea rows='15' cols='50' name="content"></textarea></td></tr>
+			<tr><td>Tags : <input size=50 name="tags"></td></tr>
+			<tr>
+				<td><input type="submit" value="Submit"></td>
+			</tr>
+			</tbody>
+		</form>
+	</table>
+	{% endif %}
+{% endblock %}

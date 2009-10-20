@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+
+{% block title %}Delete Page{% endblock %}
+
+
+{% block content %}
+
+<div style="text-align: center; margin-top: 50px;">
+	Are you sure to delete page "{{ object.subject }}" permanantly?
+</div>
+<div style="text-align: center; margin-top: 50px;">
+	<form method="POST" action="">
+		<input type="submit" value="Delete Permanatly!">
+	</form>
+</div>
+
+{% endblock %}
