@@ -2,6 +2,7 @@
 from django.contrib.auth.models import User
 from blog.models import *
 
+from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.views.generic.list_detail import object_list
 from django.http import HttpResponseRedirect
@@ -11,7 +12,11 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 import datetime
 
+@login_required
 def page_create(request):
+	if not request.user.is_staff:
+		return redirect_to_login(request.META.get('PATH_INFO','/admin'))
+
 	if request.method == 'POST':
 		subject = request.POST.get('subject', '')
 		content = request.POST.get('content', '')
@@ -31,6 +36,7 @@ def page_create(request):
 		return HttpResponseRedirect(reverse('blog.views.page_index'))
 
 
+@login_required
 def page_index(request, template='blog/page_list.html'):
 	page = request.GET.get('page', 1)
 	keyword = request.GET.get('keyword', '')
@@ -49,6 +55,7 @@ def page_index(request, template='blog/page_list.html'):
 			extra_context = {'query': keyword })
 
 
+@login_required
 def page_update(request, page_id):
 	sticky = request.GET.get('sticky', '')
 	private = request.GET.get('private', '')
@@ -77,14 +84,18 @@ def page_update(request, page_id):
 	return HttpResponseRedirect(reverse('blog.views.page_index'))
 
 
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
+@login_required
+def roll_index(request, template='blog/roll_list.html'):
+	if not request.user.is_staff:
+		return redirect_to_login(request.META.get('PATH_INFO','/admin'))
 
-#from django.contrib.auth.views import redirect_to_login
-#from django.contrib.auth.decorators import login_required
-#from django.shortcuts import render_to_response
-#from django.template import RequestContext
-#from django.http import HttpResponse
+	objs = Roll.objects.all()
 
-# Create your views here.
-
+	return render_to_response(template,
+			{'rolls':objs},
+			context_instance=RequestContext(request),
+			)
 
