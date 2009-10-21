@@ -188,7 +188,7 @@ static void _send(int sock, const char *buffer, size_t size) {
 /* additional 1-byte for safe '\0' */
 char s_cmd[BUFFER_SIZE + 1] = "";
 char c_cmd[BUFFER_SIZE + 1] = "";
-char prompt[BUFFER_SIZE] = "NONE";
+char prompt[BUFFER_SIZE + 1] = "NONE";
 
 #define CLI	(source == 'C')
 #define SVR	(source == 'S')
@@ -214,7 +214,7 @@ int os_logger(char source, const char *str, int len)
 	for (i = 0; i < len; i++) {
 		//DEBUG(("icurrent char: (0x%02x)\n", str[i]));
 		if ((char)str[i] == 0x0D) {
-			if (CLI && !strncmp(prompt, "Password:", 9)) {
+			if (CLI && strstr(prompt, "word:")) {
 				os_log("%sPASSWD PROTECTED (experimental)", dr);
 			} else {
 				os_log("%s%s,%d", dr, buffer, strlen(buffer));
@@ -234,15 +234,22 @@ int os_logger(char source, const char *str, int len)
 
 		if (strlen(buffer) >= (BUFFER_SIZE)) {
 			/* print out current log string with mark: */
-			os_log("%s%s:CONT,%d", dr, buffer, strlen(buffer));
-			sprintf(buffer, "CONT:");
+			char tmp[BUFFER_SIZE + 1];
+			strncpy(tmp, buffer, BUFFER_SIZE - 5);
+			tmp[BUFFER_SIZE - 5] = '\0';
+			os_log("%s%s:CONT,%d", dr, tmp, strlen(tmp));
+			/* buggy? but buffer_size is enough to. */
+			sprintf(buffer, "%s", buffer + BUFFER_SIZE - 5);
+			/* we need tail of previous buffer.
+			 * to detect server's prompt
+			 */
 		}
 	}
 
 	if (SVR && strlen(s_cmd) && strncmp(prompt, s_cmd, strlen(prompt))) {
 		os_log("_INFO: prompt changed from '%s' to '%s'.",
 				prompt, s_cmd);
-		sprintf(prompt, s_cmd);
+		strcpy(prompt, s_cmd);
 	}
 
 	return 0;
