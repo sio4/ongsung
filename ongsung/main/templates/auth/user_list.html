@@ -6,27 +6,6 @@
 
 {% block style %}
 	<style>
-		table.log-list { width: 100%; }
-		table.log-list tr,
-		table.log-list tr td,
-		table.log-list tr th {
-			background: transparent;
-			color: #666;
-			font-size: 10pt;
-			padding: 2 6 0 6;
-			border-bottom: 1px solid #ddd;
-			padding: 1px 5px 0;
-		}
-		table#log_list tr td.statement {
-			text-align: left;
-		}
-		#page-nav { float: right; margin-top: 15px; }
-		#page-navigation {
-			margin-top: 15px;
-			padding-top: 3px;
-			border-top: 1px solid #ddd;
-			text-align: center;
-		}
 		#query-form { text-align: center; margin: 10px; }
 		#query-form input { color: #666; border: 1px solid #999; }
 		#query-form input { background: #f0f0f0; }
@@ -43,7 +22,7 @@
 
 {% block content %}
 	<h1>User list</h1>
-	<table class="log-list">
+	<table class="expanded-sheet">
 		<tr>
 			<th>id</th>
 			<th>name</th>
@@ -61,47 +40,59 @@
 		<form method="GET" action="">
 			<td><input size=20 name="name" value="{{ name }}"></td>
 		</form>
-			<td>:</td>
-			<td>:</td>
-			<td>:</td>
-			<td>:</td>
-			<td>:</td>
-			<td>:</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
 		</tr>
 		</form>
 		{% for u in object_list %}
 		<tr>
-			<td><a href="/admin/user/{{ u.id }}">{{ u.username }}</a></td>
-			<td>{{ u.get_full_name|default:"(None)" }} </td>
-			<td>{{ u.email|default:"(None)" }} </td>
+			<form method="POST" action="{{ u.id }}/update/">
+			<td><input class='text' size=10 name="username" value="{{ u.username }}"></td>
+			<td>
+				<input class='text ra' size=10 name="first_name"
+				value="{{ u.first_name|default:"(None)" }}">
+				<input class='text' size=10 name="last_name" value="{{ u.last_name }}">
+			</td>
+			<td><input class='text' size=20 name="email" value="{{ u.email }}"></td>
 			<td>
 			{% if u.is_active %}
-			<img src="/media/img/admin/icon-yes.gif">
+			<a href="{{ u.id }}/update/?active=0"><img src="/media/img/admin/icon-yes.gif"></a>
 			{% else %}
-			<img src="/media/img/admin/icon-no.gif">
+			<a href="{{ u.id }}/update/?active=1"><img src="/media/img/admin/icon-no.gif"></a>
 			{% endif %}
 			</td>
 			<td>
 			{% if u.is_staff %}
-			<a href=""><img src="/media/img/admin/icon-yes.gif"></a>
+			<a href="{{ u.id }}/update/?staff=0"><img src="/media/img/admin/icon-yes.gif"></a>
 			{% else %}
-			<a href=""><img src="/media/img/admin/icon-no.gif"></a>
+			<a href="{{ u.id }}/update/?staff=1"><img src="/media/img/admin/icon-no.gif"></a>
 			{% endif %}
 			</td>
 			<td>{{ u.last_login|date:"Y-m-d H:i:s" }}</td>
 			<td>{{ u.date_joined|date:"Y-m-d H:i:s" }}</td>
-			<td><a href="/admin/user/{{ u.id }}/delete/">delete</a></td>
+			<td>
+				<input type="submit" value="Update" class="button">
+				<input type="button" value="Delete" class="button"
+				onclick="location.href='{{ u.id }}/delete/'; return false;" />
+			</td>
+			</form>
 		</tr>
 		{% endfor %}
 	</table>
 
-	<div id="page-nav">
-	{% if has_previous %}<a href="?page={{ previous }}">Prev</a>{% else %}Prev{% endif %}
+	<div id="nav-bar">
+	<div id="nav-buttons">
+		{% if has_previous %}<a href="?page={{ previous }}">Prev</a>
+		{% else %}Prev{% endif %}
 	|
-	{% if has_next %}<a href="?page={{ next }}">Next</a>{% else %}Next{% endif %}
+		{% if has_next %}<a href="?page={{ next }}">Next</a>
+		{% else %}Next{% endif %}
 	</div>
 
-	<div id="page-navigation">
 	{% for p in page_range %}
 		{% ifequal p page %}
 	<span class="current_page">{{ p }}</span>
@@ -113,33 +104,30 @@
 
 	<div id="more-options">
 		<div>
-			<a href="{% url main.views.user_create %}">New User</a>
-		</div>
-		<div>
 			export list as <a href="?id={{ id }}&name={{ name }}&format=csv">CSV</a>
 		</div>
 	</div>
 
 	<h2>Add New User:</h2>
-	<table class="log-list">
+	<table class="expanded-sheet">
 		<tr>
-			<td>login name</td>
-			<td>first name</td>
-			<td>last name</td>
-			<td>e-mail address</td>
-			<td>password</td>
-			<td>confirm</td>
-			<td></td>
+			<th>login name</th>
+			<th>first name</th>
+			<th>last name</th>
+			<th>e-mail address</th>
+			<th>password</th>
+			<th>confirm</th>
+			<th></th>
 		</tr>
 		<tr>
 			<form method="POST" action="{% url main.views.user_create %}">
-			<td><input size=10 name="username" value=""></td>
-			<td><input size=5 name="first_name" value=""></td>
-			<td><input size=5 name="last_name" value=""></td>
-			<td><input size=20 name="email" value=""></td>
-			<td><input type="password" size=15 name="password1"></td>
-			<td><input type="password" size=15 name="password2"></td>
-			<td><input type="submit" value="Add"></td>
+			<td><input class="text" size=10 name="username" value=""></td>
+			<td><input class="text" size=10 name="first_name" value=""></td>
+			<td><input class="text" size=10 name="last_name" value=""></td>
+			<td><input class="text" size=20 name="email" value=""></td>
+			<td><input class="text" type="password" size=15 name="password1"></td>
+			<td><input class="text" type="password" size=15 name="password2"></td>
+			<td><input class="button" type="submit" value="Add"></td>
 			</form>
 		</tr>
 	</table>
