@@ -21,6 +21,14 @@ div#connect_form form input { border: 1px dotted #bbb; }
 
 .page-sticky .page-head .page-title { background: #eea; }
 
+/* login page */
+div#login_form { margin: auto; width: 25em; text-align: center; }
+div#login_form { background: inherit; margin-top: 90px;}
+div#login_form { border: 2px solid #888; padding: 10px; }
+div#login_form div { margin:4px; background:transparent;}
+div#login_form label { width: 9em; float:left; text-align: right; }
+div#login_form form input { border: 1px solid #002a52; margin-left: 4px;}
+
 
 /* for expanded sheet/table =============================================== */
 /* used: roll_list, user_list, log_list
@@ -167,18 +175,11 @@ ul { list-style: square; }
 /* classes */
 
 /*
-div.box { background: inherit; border: 2px solid #888; padding: 10px; }
 
 #sidebar { float: right; min-height: 200pt; width: 200px; }
 #sidebar { border-left: 1px solid #aaa; }
 #valid-w3c { text-align: center; }
 
-
-div#login_form { margin: auto; width: 25em; text-align: center; }
-div#login_form { border: 0; background: inherit; margin-top: 90px;}
-div#login_form div { margin:4px; background:transparent;}
-div#login_form label { width: 9em; float:left; text-align: right; }
-div#login_form form input { border: 1px solid #002a52; margin-left: 4px;}
 
 div#connect_form { text-align: center; }
 div#connect_form form input { border: 1px solid #002a52; }
