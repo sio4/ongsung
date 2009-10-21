@@ -57,6 +57,29 @@ def user_create(request):
 		return HttpResponseRedirect(reverse('main.views.user_index'))
 
 
+def user_update(request, user_id):
+	try:
+		user = User.objects.get(pk=user_id)
+	except:
+		return HttpResponse(status=404)
+
+	if request.method == 'POST':
+		user.username = request.POST.get('username', '')
+		user.first_name = request.POST.get('first_name', '')
+		user.last_name = request.POST.get('last_name', '')
+		user.email = request.POST.get('email', '')
+		user.save()
+		return HttpResponseRedirect(reverse('main.views.user_index'))
+	elif request.method == 'GET':
+		if request.GET.get('active', None) != None:
+			user.is_active = int(request.GET['active'])
+		if request.GET.get('staff', None) != None:
+			user.is_staff = int(request.GET['staff'])
+		user.save()
+
+	return HttpResponseRedirect(reverse('main.views.user_index'))
+
+
 
 @login_required
 def user_detail(request, user_id, template='auth/user_detail.html'):
