@@ -23,6 +23,7 @@
 			<div class="login-info">
 				<a href="{% url django.contrib.auth.views.logout %}">Logout</a>
 			</div>
+			<div class="login-info"><a href="/blog/page/">Blog</a></div>
 			{% if user.is_staff %}
 			<div class="login-info admin-only">
 				<ul>
@@ -33,8 +34,12 @@
 				</ul>
 			</div>
 			{% endif %}
-			<div class="login-info"><a href="/blog/page/">Blog</a></div>
-			<div class="login-info">Preference</div>
+			<div class="login-info">
+				<ul>
+					<li>Preference</li>
+					<li><a href="/accounts/password/">Change Password</a></li>
+				</ul>
+			</div>
 			<div class="login-info">Welcome, {{ user.username }}</div>
 			{% endif %}
 			<h1 id="main-title"><a href="/ongsung/">Ongsung</a></h1>

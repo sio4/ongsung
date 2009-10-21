@@ -22,5 +22,7 @@ urlpatterns = patterns('',
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    (r'^accounts/password/$', 'django.contrib.auth.views.password_change',
+			{ 'post_change_redirect':'/ongsung', }),
 		(r'^accounts/profile/$', redirect_to, {'url':'/ongsung'}),
 )
