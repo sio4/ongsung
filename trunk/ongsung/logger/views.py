@@ -75,6 +75,18 @@ def session_detail(request, session_id, template='logger/session_detail.html'):
 
 	logs = Log.objects.filter(session=sess)
 
+	log_filter = request.GET.get('filter', 'client')
+	if log_filter == 'info':
+		log_filter = '_INFO'
+	elif log_filter == 'server':
+		log_filter = '<<<'
+	elif log_filter == 'client':
+		log_filter = '>>>'
+	elif log_filter == 'full':
+		log_filter = ''
+
+	logs = logs.filter(statement__contains=log_filter).order_by('time')
+
 	return render_to_response(template,
 			{'session':sess, 'logs':logs},
 			context_instance=RequestContext(request),
