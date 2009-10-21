@@ -4,20 +4,7 @@
 {% block title %}User Management{% endblock %}
 
 
-{% block style %}
-	<style>
-		#query-form { text-align: center; margin: 10px; }
-		#query-form input { color: #666; border: 1px solid #999; }
-		#query-form input { background: #f0f0f0; }
-		table#create-form { margin-top: 20px;}
-		#create-form tr { background: inherit; }
-		#create-form input { color: #666; border: 1px solid #999; }
-		#create-form input { background: #f0f0f0; }
-		#create-form td, #create-form th { border: 0; padding-left: 20px; }
-		#more-options { text-align: right; margin-top: 10px;}
-		.current_page { color: #999; font-weight: bold; }
-	</style>
-{% endblock %}
+{% block style %}{% endblock %}
 
 
 {% block content %}
@@ -51,13 +38,16 @@
 		{% for u in object_list %}
 		<tr>
 			<form method="POST" action="{{ u.id }}/update/">
-			<td><input class='text' size=10 name="username" value="{{ u.username }}"></td>
+			<td>
+				<!--input class='text' name="username" value="{{ u.username }}"-->
+				<a href="/admin/user/{{ u.id }}">{{ u.username }}</a>
+			</td>
 			<td>
 				<input class='text ra' size=10 name="first_name"
 				value="{{ u.first_name|default:"(None)" }}">
-				<input class='text' size=10 name="last_name" value="{{ u.last_name }}">
+				<input class='text' size=8 name="last_name" value="{{ u.last_name }}">
 			</td>
-			<td><input class='text' size=20 name="email" value="{{ u.email }}"></td>
+			<td><input class='text' size=15 name="email" value="{{ u.email }}"></td>
 			<td>
 			{% if u.is_active %}
 			<a href="{{ u.id }}/update/?active=0"><img src="/media/img/admin/icon-yes.gif"></a>

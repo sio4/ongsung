@@ -4,36 +4,7 @@
 {% block title %}User Info{% endblock %}
 
 
-{% block style %}
-	<style>
-		table#log_list { width: 100%; }
-		table#log_list tr,
-		table#log_list tr td,
-		table#log_list tr th {
-			background: transparent;
-			color: #666;
-			font-size: 10pt;
-			padding: 2 6 0 6;
-			border-bottom: 1px solid #ddd;
-			padding: 1px 5px 0;
-		}
-		table#log_list tr td.statement {
-			text-align: left;
-		}
-		#page-nav { float: right; margin-top: 15px; }
-		#page-navigation {
-			margin-top: 15px;
-			padding-top: 3px;
-			border-top: 1px solid #ddd;
-			text-align: center;
-		}
-		#query-form { text-align: center; margin: 10px; }
-		#query-form input { color: #666; border: 1px solid #999; }
-		#query-form input { background: #f0f0f0; }
-		#export-this { text-align: right; }
-		.current_page { color: #999; font-weight: bold; }
-	</style>
-{% endblock %}
+{% block style %}{% endblock %}
 
 
 {% block content %}
@@ -59,7 +30,7 @@
 
 
 	<h2>Related Sessions:</h2>
-	<table id="log_list">
+	<table class="expanded-sheet">
 		<tr>
 			<th>time</th>
 			<th>context</th>
@@ -85,13 +56,15 @@
 		{% endfor %}
 	</table>
 
-	<div id="page-nav">
-		{% if has_previous %}<a href="?context={{ context }}&page={{ previous }}">Prev</a>{% else %}Prev{% endif %}
-	|
-	{% if has_next %}<a href="?context={{ context }}&page={{ next }}">Next</a>{% else %}Next{% endif %}
-	</div>
+	<div id="nav-bar">
+		<div id="nav-buttons">
+			{% if has_previous %}<a href="?context={{ context }}&page={{ previous }}">Prev</a>
+			{% else %}Prev{% endif %}
+		|
+			{% if has_next %}<a href="?context={{ context }}&page={{ next }}">Next</a>
+			{% else %}Next{% endif %}
+		</div>
 
-	<div id="page-navigation">
 	{% for p in page_range %}
 		{% ifequal p page %}
 	<span class="current_page">{{ p }}</span>
@@ -101,7 +74,7 @@
 	{% endfor %}
 	</div>
 
-	<!--div id="export-this">
+	<!--div id="more-options">
 	export as <a href="?context={{ context }}&format=csv">CSV</a>
 	</div-->
 

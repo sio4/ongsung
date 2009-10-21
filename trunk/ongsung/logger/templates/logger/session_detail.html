@@ -4,43 +4,12 @@
 {% block title %}Session Detail{% endblock %}
 
 
-{% block style %}
-<style>
-	table#detail { width: 50%; padding-bottom: 20px; }
-	table#detail tr { background: transparent; }
-	table#detail td { padding: 1px 5px 0; border-bottom: 1px solid #ddd; }
-	table#detail td.label { text-align: right; }
-	table#detail td.content { text-align: left; }
-
-	div#cmd-filter { text-align: right; border-bottom: 2px solid #ccc; }
-
-	table#log_list { width: 100%; }
-	table#log_list tr,
-	table#log_list tr td,
-	table#log_list tr th {
-		background: transparent;
-		color: #666;
-		font-size: 10pt;
-		padding: 2 6 0 6;
-		border-bottom: 1px solid #ddd;
-		padding: 1px 5px 0;
-	}
-	table#log_list tr td.statement {
-		text-align: left;
-	}
-	#page-navigation {
-		margin-top: 15px;
-		padding-top: 3px;
-		border-top: 1px solid #ddd;
-		text-align: center;
-	}
-</style>
-{% endblock %}
+{% block style %}{% endblock %}
 
 
 {% block content %}
 <h1>Session Detail</h1>
-<table id="detail">
+<table id="definition">
 	<tr><td class="label">Start time</td>
 		<td class="content">{{ session.time|date:"Y-m-d H:i:s" }}</td></tr>
 	<tr><td class="label">Session</td>
@@ -55,7 +24,7 @@
 
 <h3>Command Log:</h3>
 
-<div id="cmd-filter">
+<div id="more-options">
 Filter
 | <a href="?filter=info">Info only</a>
 | <a href="?filter=client">Client only</a>
@@ -63,7 +32,7 @@ Filter
 | <a href="?filter=full">Full</a>
 </div>
 
-<table id="log_list">
+<table class="expanded-sheet">
 	<tr>
 		<th>#</th>
 		<th>priority</th>
@@ -74,7 +43,7 @@ Filter
 	<tr>
 		<td>{{ log.serial }}</td>
 		<td>{{ log.priority }}</td>
-		<td class="statement">{{ log.statement }}</td>
+		<td class="statement la">{{ log.statement }}</td>
 		<td>{{ log.time|date:"Y-m-d H:i:s" }}</td>
 	</tr>
 	{% endfor %}
