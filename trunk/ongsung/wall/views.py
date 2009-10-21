@@ -8,12 +8,16 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 
+from django.views.decorators.cache import never_cache
+from django.views.decorators.cache import cache_control
+
 import os
 import datetime
 import httplib, urllib
 import time
 
 
+@cache_control(must_revalidate=True, private=True, no_cache=True, max_age=0)
 @login_required
 def index(request, template_name='wall/index.html'):
 	recent = Bookmark.objects.filter(user=request.user).order_by('-last_date')[:5]
@@ -45,6 +49,8 @@ def index(request, template_name='wall/index.html'):
 				'protocol':protocol,
 				'launch':launch})
 
+
+@cache_control(must_revalidate=True, private=True, no_cache=True, max_age=0)
 @login_required
 def connect(request, device_id=None):
 	user = request.user
