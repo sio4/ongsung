@@ -12,6 +12,8 @@
 	table#detail td.label { text-align: right; }
 	table#detail td.content { text-align: left; }
 
+	div#cmd-filter { text-align: right; border-bottom: 2px solid #ccc; }
+
 	table#log_list { width: 100%; }
 	table#log_list tr,
 	table#log_list tr td,
@@ -52,6 +54,15 @@
 </table>
 
 <h3>Command Log:</h3>
+
+<div id="cmd-filter">
+Filter
+| <a href="?filter=info">Info only</a>
+| <a href="?filter=client">Client only</a>
+| <a href="?filter=server">Server only</a>
+| <a href="?filter=full">Full</a>
+</div>
+
 <table id="log_list">
 	<tr>
 		<th>#</th>

@@ -206,7 +206,7 @@ int os_logger(char source, const char *str, int len)
 		buffer = c_cmd;
 		sprintf(dr, ">>> ");
 	} else {
-		os_log("ERROR: unknown connection to log: %c", source);
+		os_log("_INFO: unknown connection to log: %c", source);
 		return 1;
 	}
 
@@ -400,7 +400,7 @@ int main(int argc, char **argv) {
 	/* parse listening port */
 	listen_port = strtol(argv[4], 0, 10);
 
-	os_log("tunnel from %s to %s is drilled.", argv[3], argv[1]);
+	os_log("_INFO: tunnel from %s to %s is drilled.", argv[3], argv[1]);
 	/* loop forever, until user kills process */
 	for (;;) {
 		/* create listening socket */
@@ -456,7 +456,7 @@ int main(int argc, char **argv) {
 		 */
 
 		if (strcmp(argv[3], inet_ntoa(addr.sin_addr))) {
-			os_log("connection from unauthorized host(%s)."
+			os_log("_INFO: connection from unauthorized host(%s)."
 					" reject and continue.",
 					inet_ntoa(addr.sin_addr));
 			close(client.sock);
@@ -493,7 +493,8 @@ int main(int argc, char **argv) {
 			return 1;
 		}
 
-		os_log("connection established. (%s to %s)", argv[4], argv[1]);
+		os_log("_INFO: connection established. (%s to %s)",
+				argv[4], argv[1]);
 
 		/* free address lookup info */
 		freeaddrinfo(ai);
@@ -567,7 +568,7 @@ int main(int argc, char **argv) {
 		 */
 		break;
 	}
-	os_log("mission completed! yiman...", argv[4], argv[1]);
+	os_log("_INFO: mission completed! yiman...", argv[4], argv[1]);
 
 	/* not that we can reach this, but GCC will cry if it's not here */
 	return 0;
