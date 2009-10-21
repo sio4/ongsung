@@ -20,27 +20,29 @@
 	<body>
 		<div id="header" class="frame">
 			{% if user.is_authenticated %}
-			<div class="login-info">
-				<a href="{% url django.contrib.auth.views.logout %}">Logout</a>
+			<div id="system-menu">
+				<div id="sm-welcome">Welcome, {{ user.username }}</div>
+				<div id="sm-pref">
+					<ul>
+						<li>Preference</li>
+						<li><a href="/accounts/password/">Change Password</a></li>
+					</ul>
+				</div>
+				{% if user.is_staff %}
+				<div id="sm-admin" class="admin-only">
+					<ul>
+						<li><a href="/admin/log/">Search on Log</a></li>
+						<li><a href="/admin/user/">Users</a></li>
+						<!--li><a href="/admin/device/">Devices</a></li-->
+						<li><a href="/blog/roll/">Webrolls</a></li>
+					</ul>
+				</div>
+				<div id="sm-blog"><a href="/blog/page/">Blog</a></div>
+				<div id="sm-logout">
+					<a href="{% url django.contrib.auth.views.logout %}">Logout</a>
+				</div>
+				{% endif %}
 			</div>
-			<div class="login-info"><a href="/blog/page/">Blog</a></div>
-			{% if user.is_staff %}
-			<div class="login-info admin-only">
-				<ul>
-				<li><a href="/admin/log/">Search on Log</a></li>
-				<li><a href="/admin/user/">Users</a></li>
-				<!--li><a href="/admin/device/">Devices</a></li-->
-				<li><a href="/blog/roll/">Webrolls</a></li>
-				</ul>
-			</div>
-			{% endif %}
-			<div class="login-info">
-				<ul>
-					<li>Preference</li>
-					<li><a href="/accounts/password/">Change Password</a></li>
-				</ul>
-			</div>
-			<div class="login-info">Welcome, {{ user.username }}</div>
 			{% endif %}
 			<h1 id="main-title"><a href="/ongsung/">Ongsung</a></h1>
 			<h5 id="tagline">secure gateway</h5>

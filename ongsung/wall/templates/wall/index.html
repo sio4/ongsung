@@ -2,13 +2,7 @@
 
 {% block title %}My Ongsung{% endblock %}
 
-{% block style %}
-<style>
-	div#connect_form select { border: 1px dotted #bbb; }
-	div#connect_form form input { border: 1px dotted #bbb; }
-</style>
-{% endblock %}
-
+{% block style %}{% endblock %}
 
 {% block content %}
 
@@ -27,20 +21,26 @@
 </form>
 </div>
 
-<h3>stared</h3>
+<div class="device-list" id="device-stared">
+<h3>Stared</h3>
 {% with stared as objects %}
 {% include 'wall/_bookmarks.html' %}
 {% endwith %}
+</div>
 
-<h3>top 5</h3>
+<div class="device-list" id="device-top10">
+<h3>Top 5</h3>
 {% with top as objects %}
 {% include 'wall/_bookmarks.html' %}
 {% endwith %}
+</div>
 
-<h3>recent</h3>
+<div class="device-list" id="device-recent">
+<h3>Recent</h3>
 {% with recent as objects %}
 {% include 'wall/_bookmarks.html' %}
 {% endwith %}
+</div>
 
 <iframe id="launcher" src=""
 	style="border:0px solid black; width:10px; height:1px;"></iframe>
