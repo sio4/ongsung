@@ -62,9 +62,9 @@
 			{% block content %}{% endblock %}
 		</div>
 
-		<!--div id="bottom" class="frame">
+		<div id="bottom" class="frame">
 		{% if user.is_authenticated %}
-		<div class="help-pack">
+		<!--div class="help-pack">
 			Downloads(deprecated) :
 			<ul id="side-ie7-helper">
 				<li><a href="/media/files/putty.exe">Putty</a></li>
@@ -73,14 +73,15 @@
 				<li><a href="/media/files/telnet-handler-default.reg">Use default telnet emulator</a></li>
 			</ul>
 		</div-->
-
-		{% endif %}
 		</div>
 
 		<div class="webrolls">
 			{% load blogget %}
 			{% rollbox %}
 		</div>
+
+		{% endif %}
+
 		<div id="footer" class="frame">
 			ongsung 0.9 &copy; 2009 The Ongsung Project.
 		<p id="valid-w3c">
