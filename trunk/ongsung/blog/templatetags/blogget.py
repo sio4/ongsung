@@ -7,5 +7,5 @@ register = template.Library()
 
 @register.inclusion_tag('blog/rollbox.html')
 def rollbox():
-	rolls = Roll.objects.all()
+	rolls = Roll.objects.all().order_by('rank')
 	return {'rolls':rolls}
