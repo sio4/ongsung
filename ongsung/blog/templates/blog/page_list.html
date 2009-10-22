@@ -13,28 +13,30 @@
 		{% for p in object_list %}
 		<div class='page{% if p.sticky %} page-sticky{% endif %}' id="{{ p.id }}">
 			<div class='page-head'>
-				<h3 class='page-title'>{{ p.subject }}</h2>
+				<h3 class='page-title'><a href="{{ p.id }}">{{ p.subject }}</a></h2>
 				{% ifequal user p.author %}
 				<div class='page-info-meta'>
+					<a class='' href="{{ p.id }}/edit/">Edit</a>
+					|
 					{% if p.private %}
-					<a class='p-unpri' href="{{ p.id }}/update/?private=f">set public</a>
+					<a class='p-unpri' href="{{ p.id }}/update/?private=f">Set Public</a>
 					{% else %}
-					<a class='p-pri' href="{{ p.id }}/update/?private=t">set private</a>
+					<a class='p-pri' href="{{ p.id }}/update/?private=t">Set Private</a>
 					{% endif %}
 					|
 					{% if p.published %}
-					<a class='p-unpub' href="{{ p.id }}/update/?published=f">unpublish</a>
+					<a class='p-unpub' href="{{ p.id }}/update/?published=f">Unpublish</a>
 					{% else %}
-					<a class='p-pub' href="{{ p.id }}/update/?published=t">publish</a>
+					<a class='p-pub' href="{{ p.id }}/update/?published=t">Publish</a>
 					{% endif %}
 					|
 					{% if p.sticky %}
-					<a class='p-unsti' href="{{ p.id }}/update/?sticky=f">unset sticky</a>
+					<a class='p-unsti' href="{{ p.id }}/update/?sticky=f">Unset Sticky</a>
 					{% else %}
-					<a class='p-sti' href="{{ p.id }}/update/?sticky=t">set sticky</a>
+					<a class='p-sti' href="{{ p.id }}/update/?sticky=t">Set Sticky</a>
 					{% endif %}
 					|
-					<a href="{{ p.id }}/delete/">delete</a>
+					<a href="{{ p.id }}/delete/">Delete</a>
 				</div>
 				{% endifequal %}
 				<div class='page-info'>
