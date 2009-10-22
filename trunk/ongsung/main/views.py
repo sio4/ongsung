@@ -64,7 +64,6 @@ def user_update(request, user_id):
 		return HttpResponse(status=404)
 
 	if request.method == 'POST':
-		user.username = request.POST.get('username', '')
 		user.first_name = request.POST.get('first_name', '')
 		user.last_name = request.POST.get('last_name', '')
 		user.email = request.POST.get('email', '')
