@@ -19,15 +19,15 @@ div#connect_form form input { border: 1px dotted #bbb; }
 .page .page-content { padding: 10px; background: #fafafa; font-size: 0.9em;}
 .page .page-tags { padding: 2px 10px; background: #f0f0f0; font-style: italic;}
 
-.page-sticky .page-head .page-title { background: #eea; }
+.page-sticky .page-head .page-title { background: #ddd; }
 
 /* sticky notics list on bottom */
-.page-title-list { border-top: 1px solid #999;
-	list-style: none; font-size: 0.9em; background: #ddd; padding: 0; }
-.page-title-list .page-title {
-	border-top: 1px solid #fff; border-bottom: 1px solid #555; }
-.page-title-list .page-title a { padding: 0 20px; display: block; }
-.page-title a:hover { background: #888; color: white; }
+.page-title-list { border-top: 0px solid #999; margin: 0;
+	list-style: none; font-size: 0.9em; font-style: italic;
+	background: #888; padding: 0; }
+.page-title-list .page-title { border-bottom: 1px solid #555; }
+.page-title-list .page-title a { padding: 0 20px; display: block; color: #eee; }
+.page-title a:hover { background: #aaa; color: black; }
 
 /* login page */
 div#login_form { margin: auto; width: 25em; text-align: center; }
@@ -108,22 +108,25 @@ table#definition td.content { text-align: left; }
 /* base styles ============================================================ */
 
 body {
+	color: #444;
 	margin: 0;
 	font-family: "Trebuchet MS";
 	font-size: 10pt;
+	/*
 	background-image: url('/media/images/moyang-background.png');
 	background-repeat: no-repeat;
 	background-position: bottom left;
+	*/
 }
+a,a:visited {color: #444; } /* work-around for IE */
 a,a:visited {color: inherit; text-decoration: none; }
-a,a:visited {color: #000; } /* work-around for IE */
 a img { border: 0px; }
 
 /* template frame --------------------------------------------------------- */
 
 div.frame { padding: 10px 20px; }
 
-div#header { border-bottom: 5px solid #888; background:#444; color:white;}
+div#header { border-bottom: 5px solid #555; background:#222; color:white;}
 div#header a, div#header a:visited { color:white; }
 div#header h1#main-title { margin: 2px 0; }
 div#header h5#tagline { margin: 0px; padding-left: 10px; }
@@ -135,18 +138,25 @@ div#header div#system-menu a { text-decoration: none; }
 
 /* div#content { overflow: hidden; min-height: 200pt; padding-bottom: 20px; } */
 div#content { min-height: 150pt; padding-bottom: 20px; }
+div#content {
+	padding-bottom: 180px;
+	background-image: url('/media/images/moyang-background-bw.png');
+	background-repeat: no-repeat;
+	background-position: bottom left;
+}
 
-div#footer { border-top: 1px solid #888; text-align: center; }
-div#footer { margin-top: 60px; }	/* space for bg image */
+div#footer { border-top: 0px solid #888; text-align: center;
+	padding: 5px; padding-bottom: 30px; background: black; color: #888; }
 
 /* bottom ----------------------------------------------------------------- */
+div#bottom { padding: 0; }
+
 div.webrolls {
-	border-top: 1px solid #333; border-bottom: 1px solid #333;
-	background: #888; color: white; font-weight: bold;
-	opacity: 0.7;
+	padding: 1px;
+	background: #444; color: white; font-weight: normal;
 	text-align: center; }
 div.webrolls ul { margin: 0; padding: 0; display: inline; }
-div.webrolls ul li { margin-left: 15px; display: inline; }
+div.webrolls ul li { margin-left: 15px; display: inline; font-style: italic; }
 div.webrolls a, div.webrolls a:visited { color: white; }
 
 div.help-pack {
@@ -159,6 +169,8 @@ div.help-pack h5 {margin: 0; float: left; }
 div.help-pack ul { margin: 0; padding: 0; display: inline; }
 div.help-pack ul li { margin-left: 15px; display: inline; }
 div.help-pack a, div.help-pack a:visited { color: white; }
+
+#valid-w3c { text-align: center; display: none; }
 
 /*
 
@@ -186,7 +198,6 @@ ul { list-style: square; }
 
 #sidebar { float: right; min-height: 200pt; width: 200px; }
 #sidebar { border-left: 1px solid #aaa; }
-#valid-w3c { text-align: center; }
 
 
 div#connect_form { text-align: center; }
