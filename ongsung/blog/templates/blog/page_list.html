@@ -11,7 +11,7 @@
 {% block content %}
 	<div class='pages'>
 		{% for p in object_list %}
-		<div class='page{% if p.sticky %} page-sticky{% endif %}'>
+		<div class='page{% if p.sticky %} page-sticky{% endif %}' id="{{ p.id }}">
 			<div class='page-head'>
 				<h3 class='page-title'>{{ p.subject }}</h2>
 				{% ifequal user p.author %}

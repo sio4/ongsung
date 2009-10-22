@@ -21,6 +21,14 @@ div#connect_form form input { border: 1px dotted #bbb; }
 
 .page-sticky .page-head .page-title { background: #eea; }
 
+/* sticky notics list on bottom */
+.page-title-list { border-top: 1px solid #999;
+	list-style: none; font-size: 0.9em; background: #ddd; padding: 0; }
+.page-title-list .page-title {
+	border-top: 1px solid #fff; border-bottom: 1px solid #555; }
+.page-title-list .page-title a { padding: 0 20px; display: block; }
+.page-title a:hover { background: #888; color: white; }
+
 /* login page */
 div#login_form { margin: auto; width: 25em; text-align: center; }
 div#login_form { background: inherit; margin-top: 90px;}
@@ -60,13 +68,13 @@ table.expanded-sheet input.button { text-align: center; width: 60px; }
 
 #more-options { text-align: right; margin-top: 10px;}
 
-div#nav-bar {
+#nav-bar {
 	margin-top: 15px;
 	padding-top: 3px;
 	border-top: 1px solid #ddd;
 	text-align: center;
 }
-div#nav-bar div#nav-buttons { float: right; }
+#nav-bar div#nav-buttons { float: right; font-weight: bold; margin-left: 30px; }
 .current_page { color: #999; font-weight: bold; }
 #more-options { text-align: right; margin-top: 10px; }
 
@@ -126,10 +134,10 @@ div#header div#system-menu a { text-decoration: none; }
 #header #system-menu .admin-only { background: #555; border: 2px solid #777; }
 
 /* div#content { overflow: hidden; min-height: 200pt; padding-bottom: 20px; } */
-div#content { min-height: 250pt; padding-bottom: 20px; }
+div#content { min-height: 150pt; padding-bottom: 20px; }
 
 div#footer { border-top: 1px solid #888; text-align: center; }
-div#footer { margin-top: 50px; }	/* space for bg image */
+div#footer { margin-top: 60px; }	/* space for bg image */
 
 /* bottom ----------------------------------------------------------------- */
 div.webrolls {

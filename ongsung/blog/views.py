@@ -37,7 +37,12 @@ def page_create(request):
 
 
 @login_required
-def page_index(request, template='blog/page_list.html'):
+def page_index(request, page_id=0, template='blog/page_list.html'):
+	if page_id != 0:
+		objs = Page.objects.filter(pk=page_id)
+		return object_list(request, queryset=objs, paginate_by=5, page=1,
+				extra_context = {'query':'' })
+
 	page = request.GET.get('page', 1)
 	keyword = request.GET.get('keyword', '')
 	if request.user.is_staff:
