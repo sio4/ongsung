@@ -61,6 +61,21 @@ def page_index(request, page_id=0, template='blog/page_list.html'):
 
 
 @login_required
+def page_edit(request, page_id, template='blog/page_form.html'):
+	p = Page.objects.get(pk=page_id)
+
+	if request.method != 'POST':
+		return render_to_response(template, {'page':p},
+				context_instance=RequestContext(request))
+
+	p.subject = request.POST.get('subject', p.subject)
+	p.content = request.POST.get('content', p.content)
+	p.save()
+
+	return HttpResponseRedirect(reverse('blog.views.page_index', args=(p.id,)))
+
+
+@login_required
 def page_update(request, page_id):
 	sticky = request.GET.get('sticky', '')
 	private = request.GET.get('private', '')

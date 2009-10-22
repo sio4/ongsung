@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+
+{% block title %}Blog{% endblock %}
+{% load markup %}
+
+
+{% block style %}
+<style>
+	input#id_subject {
+		border: 1px solid #777; font-size: 1em; width: 500px; background: #eee;
+	}
+	textarea#id_content {
+		border: 1px solid #777; font-size: 1em; width: 600px; background: #eee;
+	}
+</style>
+{% endblock %}
+
+
+{% block content %}
+	{% if user.is_staff %}
+	<h2>Edit Page:</h2>
+
+	<table class="log-list">
+		<form method="POST" action="">
+			<tbody>
+				<tr><td align="right">Subject : <input size=60 name="subject"
+						id="id_subject" value="{{ page.subject }}"></td></tr>
+				<tr><td><textarea rows='10' cols='50' name="content"
+						id="id_content">{{ page.content }}</textarea></td></tr>
+			<tr>
+				<td align="right"><input type="submit" value="Submit"></td>
+			</tr>
+			</tbody>
+		</form>
+	</table>
+	{% endif %}
+
+{% endblock %}
