@@ -92,7 +92,7 @@ def roll_index(request, template='blog/roll_list.html'):
 	if not request.user.is_staff:
 		return redirect_to_login(request.META.get('PATH_INFO','/admin'))
 
-	objs = Roll.objects.all()
+	objs = Roll.objects.all().order_by('rank')
 
 	return render_to_response(template,
 			{'rolls':objs},
