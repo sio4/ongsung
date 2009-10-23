@@ -31,7 +31,7 @@ div#connect_form form input { border: 1px dotted #bbb; }
 
 /* login page */
 div#login_form { margin: auto; width: 25em; text-align: center; }
-div#login_form { background: inherit; margin-top: 90px;}
+div#login_form { background: transparent; margin-top: 60px;}
 div#login_form { border: 2px solid #888; padding: 10px; }
 div#login_form div { margin:4px; background:transparent;}
 div#login_form label { width: 9em; float:left; text-align: right; }
@@ -126,7 +126,7 @@ a img { border: 0px; }
 
 div.frame { padding: 10px 20px; }
 
-div#header { border-bottom: 5px solid #555; background:#222; color:white;}
+div#header { border-bottom: 5px solid #555; background:#111; color:white;}
 div#header a, div#header a:visited { color:white; }
 div#header h1#main-title { margin: 2px 0; }
 div#header h5#tagline { margin: 0px; padding-left: 10px; }
@@ -139,7 +139,7 @@ div#header div#system-menu a { text-decoration: none; }
 /* div#content { overflow: hidden; min-height: 200pt; padding-bottom: 20px; } */
 div#content { min-height: 150pt; padding-bottom: 20px; }
 div#content {
-	padding-bottom: 180px;
+	padding-bottom: 160px;
 	background-image: url('/media/images/moyang-background-bw.png');
 	background-repeat: no-repeat;
 	background-position: bottom left;
@@ -152,11 +152,11 @@ div#footer { border-top: 0px solid #888; text-align: center;
 div#bottom { padding: 0; }
 
 div.webrolls {
-	padding: 1px;
+	padding: 1px 15px;
 	background: #444; color: white; font-weight: normal;
-	text-align: center; }
+	text-align: left; }
 div.webrolls ul { margin: 0; padding: 0; display: inline; }
-div.webrolls ul li { margin-left: 15px; display: inline; font-style: italic; }
+div.webrolls ul li { margin: 0 5px; display: inline; font-style: italic; }
 div.webrolls a, div.webrolls a:visited { color: white; }
 
 div.help-pack {
