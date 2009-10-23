@@ -21,7 +21,7 @@
 			<form method="POST" action="{{ r.id }}/update/">
 				<td><input size=40 name="title" value="{{ r.title }}" class="text"></td>
 				<td><input size=50 name="link" value="{{ r.link }}" class="text"></td>
-				<td><input size=5 name="rank" value="{{ r.rank }}" class="text ra"></td>
+				<td class="ra">{{ r.rank }}</td>
 				<td>
 					<input type="submit" value="Update" class="button">
 					<input type="submit" value="Delete" class="button"
@@ -34,7 +34,7 @@
 			<form method="POST" action="create/">
 			<td><input size=40 name="title" value="" class="text"></td>
 			<td><input size=50 name="link" value="" class="text"></td>
-			<td><input size=5 name="rank" value="50" class="text ra"></td>
+			<td><input type=hidden name="rank" value="0"></td>
 			<td><input type="submit" value="Add" class="button"></td>
 			</form>
 		</tr>
