@@ -98,6 +98,25 @@ table#definition td { padding: 1px 5px 0; border-bottom: 1px solid #ddd; }
 table#definition td.label { text-align: right; }
 table#definition td.content { text-align: left; }
 
+/* widget: usage pannel =================================================== */
+div.system-usage {
+	min-height: 100px;
+	margin-top: 10px;
+	padding: 5px 5px 5px 260px;
+	font-style: italic;
+	color: white;
+	background: #c0c0c0;
+	background-image: url('/media/images/help-text.png');
+	background-repeat: no-repeat;
+	border: 2px solid #777;
+}
+div.system-usage table { font-family: Verdana; font-style: normal; }
+div.system-usage table td,
+div.system-usage table th { padding: 1px 6px; background: #aaa;
+	border-left: 1px solid #eee; border-top: 1px solid #eee;
+	border-right: 1px solid #777; border-bottom: 1px solid #777;
+}
+
 
 /* messages, dialogs ====================================================== */
 /* used: wall_list

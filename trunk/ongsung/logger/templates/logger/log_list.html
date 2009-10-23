@@ -67,4 +67,13 @@
 	export as <a href="?q={{ query }}&c={{ context }}&format=csv">CSV</a>
 	</div>
 
+	<div class="system-usage">
+		use regular expression for complex search. for example:
+		<table>
+			<tr><th>usage</th><th>result</th></tr>
+			<tr><td>&gt;&gt;&gt;.*sh.*run</td><td>search 'sh*run' commands from client command</td></tr>
+			<tr><td>&lt;&lt;&lt;.*(denied|failed)</td><td>server outputs containing word "denied" or "failed".</td></tr>
+			</table>
+	</div>
+
 {% endblock %}
