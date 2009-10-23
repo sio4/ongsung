@@ -135,7 +135,7 @@ def connect(request, device_id=None):
 
 	# waiting for worker attached and get connection info...
 	# TODO now, just work around version without queman
-	time.sleep(3)
+	time.sleep(1)
 
 
 	## temporary, just to me.
