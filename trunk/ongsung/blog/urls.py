@@ -24,7 +24,7 @@ urlpatterns = patterns('',
 		{'model':Roll,'post_save_redirect':'/blog/roll/','login_required':True}),
 	(r'^roll/(?P<object_id>\w+)/delete/$', delete_object,
 		{'model':Roll,'post_delete_redirect':'/blog/roll/','login_required':True}),
-	#(r'^roll/(?P<roll_id>\w+)/(.*)$', 'blog.views.roll_detail'),
+	(r'^roll/(?P<roll_id>\w+)/$', 'blog.views.roll_open'),
 	# default CRUD
 	#(r'^insert/$', 'logger.views.insert'),
 	#(r'^(?P<queue_id>\d+)/$', 'queman.views.detail'),	# GET, read

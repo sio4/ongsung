@@ -112,10 +112,19 @@ def roll_index(request, template='blog/roll_list.html'):
 	if not request.user.is_staff:
 		return redirect_to_login(request.META.get('PATH_INFO','/admin'))
 
-	objs = Roll.objects.all().order_by('rank')
+	objs = Roll.objects.all().order_by('title')
 
 	return render_to_response(template,
 			{'rolls':objs},
 			context_instance=RequestContext(request),
 			)
+
+@login_required
+def roll_open(request, roll_id):
+	r = Roll.objects.get(pk=roll_id)
+	r.rank = r.rank + 1
+	r.save()
+
+	return HttpResponseRedirect(r.link)
+
 
