@@ -21,10 +21,10 @@ def index(request, page=1, template='logger/log_list.html'):
 	c = request.GET.get('c', '')
 	if q.__len__():
 		logs = Log.objects.filter(
-				statement__contains=q).order_by('-time')
+				statement__iregex=q).order_by('-time')
 	elif c.__len__():
 		logs = Log.objects.filter(
-				session__context__contains=c).order_by('-time')
+				session__context__iregex=c).order_by('-time')
 	else:
 		logs = Log.objects.all().order_by('-time')
 
