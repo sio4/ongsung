@@ -6,6 +6,15 @@
 		<title>{% block title %}{% endblock %} - Ongsung</title>
 		<link rel="stylesheet" href="/media/common/default.css" />
 		<link rel="stylesheet" href="{{ path_to_theme }}style.css" />
+		{% if not stared %}
+		<!--[if lt IE 7]>
+		<style>
+			div#content.frame {
+			background-image: none;
+			}
+		</style>
+		<![endif]-->
+		{% endif %}
 		<script type="text/javascript">
 //<![CDATA[
 {% block script %}{% endblock %}
