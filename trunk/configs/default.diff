@@ -1,0 +1,22 @@
+--- default.orig	2009-10-08 14:15:51.000000000 +0900
++++ default	2009-10-26 14:48:20.000000000 +0900
+@@ -38,4 +38,19 @@
+         Allow from 127.0.0.0/255.0.0.0 ::1/128
+     </Directory>
+ 
++    #### for ongsung start
++		<Location "/">
++			Order deny,allow
++			Deny from all
++			Allow from 10.250.0.0/16 10.200.84.0/23 203.235.222.0/23
++		</Location>
++
++    FastCGIExternalServer /var/www/ongsung.fcgi -host 127.0.0.1:3001
++    Alias /media /home/moyang/media
++    RewriteEngine On
++    RewriteRule ^/(media.*)$ /$1 [QSA,L,PT]
++    RewriteCond %{REQUEST_FILENAME} !-f
++    RewriteRule ^/(.*)$ /ongsung.fcgi/$1 [QSA,L]
++    #### for ongsung end
++
+ </VirtualHost>
