@@ -119,7 +119,6 @@ def roll_index(request, template='blog/roll_list.html'):
 			context_instance=RequestContext(request),
 			)
 
-@login_required
 def roll_open(request, roll_id):
 	r = Roll.objects.get(pk=roll_id)
 	r.rank = r.rank + 1

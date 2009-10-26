@@ -23,6 +23,7 @@
 				<td><input size=50 name="link" value="{{ r.link }}" class="text"></td>
 				<td class="ra">{{ r.rank }}</td>
 				<td>
+					<input type=hidden name="rank" value="{{ r.rank }}">
 					<input type="submit" value="Update" class="button">
 					<input type="submit" value="Delete" class="button"
 					onclick="location.href='{{ r.id }}/delete/'; return false;" />
