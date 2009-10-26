@@ -43,9 +43,9 @@
 				<a href="/admin/user/{{ u.id }}">{{ u.username }}</a>
 			</td>
 			<td>
-				<input class='text ra' size=10 name="first_name"
+				<input class='text ra' size=8 name="last_name"
+				value="{{ u.last_name }}"><input class='text' size=10 name="first_name"
 				value="{{ u.first_name|default:"(None)" }}">
-				<input class='text' size=8 name="last_name" value="{{ u.last_name }}">
 			</td>
 			<td><input class='text' size=15 name="email" value="{{ u.email }}"></td>
 			<td>
