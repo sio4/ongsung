@@ -141,9 +141,6 @@ def connect(request, device_id=None):
 	## temporary, just to me.
 	request.session['launch'] = 'telnet://%s:%s' % (serv_host, serv_port)
 	request.session['message'] = message
-	print "service: %s" % command_temp
-	print "service: %s" % command
-	print "redirect to: %s" % request.session['launch']
 	return HttpResponseRedirect(reverse('wall.views.index'))
 
 # maybe this is my fault. i cannot write smart urls.py yet.

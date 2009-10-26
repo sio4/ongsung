@@ -26,7 +26,6 @@ class Session(models.Model):
 		return str(self.uuid)
 
 	def _set_uuid(self):
-		print "_set_uuid called"
 		self.uuid = str(uuid.uuid4())
 
 	def link_to(self, host_addr):
@@ -36,7 +35,6 @@ class Session(models.Model):
 		except:
 			self.host = Host(name=host_addr,addr=host_addr)
 			self.host.save()
-		print "HOST: %s" % self.host
 
 
 

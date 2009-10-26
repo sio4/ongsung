@@ -91,7 +91,7 @@ signal.alarm(TIMEOUT)
 
 target = sys.argv[1]
 
-ret = logger_query("request log session...", 'L', 0, 'new', context)
+ret = logger_query("_INFO: request log session...", 'L', 0, 'new', context)
 session = ret[1]
 serial = 0
 
@@ -116,7 +116,7 @@ while True:
 	logger_query(output.rstrip(), 'L', serial, session, context)
 
 
-ret = logger_query("log session finished...", 'L', 0, session, context)
+ret = logger_query("_INFO: log session finished...", 'L', 0, session, context)
 #proc.communicate()
 
 
