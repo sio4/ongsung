@@ -24,9 +24,10 @@ div#connect_form form input { border: 1px dotted #bbb; }
 /* sticky notics list on bottom */
 .page-title-list { border-top: 0px solid #999; margin: 0;
 	list-style: none; font-size: 0.9em; font-style: normal;
-	background: #888; padding: 0; }
-.page-title-list .page-title { border-bottom: 1px solid #555; }
+	background: #555; padding: 0; }
+.page-title-list .page-title { border-bottom: 1px solid #444; }
 .page-title-list .page-title a { padding: 0 20px; display: block; color: #eee; }
+.page-title a:visited {color: #eee; } /* work-around for IE */
 .page-title a:hover { background: #aaa; color: black; }
 
 /* login page */
