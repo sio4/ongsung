@@ -11,7 +11,8 @@
 <h1>User '{{ xuser.username }}'</h1>
 <div>
 	<ul>
-		<li>{{ xuser.get_full_name }} ({{ xuser.username }}, {{ xuser.email }})</li>
+		<li>{{ xuser.last_name }}{{ xuser.first_name }}
+		({{ xuser.username }}, {{ xuser.email }})</li>
 		{% if xuser.is_active %}
 		<li>Active User</li>
 		{% else %}
