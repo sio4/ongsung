@@ -183,14 +183,15 @@ div.help-pack ul { margin: 0; padding: 0; display: inline; }
 div.help-pack ul li { margin-left: 15px; display: inline; }
 div.help-pack a, div.help-pack a:visited { color: white; }
 
-#valid-w3c { text-align: center; display: none; }
-
-/*
 
 
-div.login-info { background: inherit; border: 0; }
-*/
-
+@media print{
+	div#header, div#sidebar, div#bottom, div.webrolls { display: none; }
+	h1 { border-bottom: 2px solid black; }
+	tr#query-form { display: none; }
+	div.system-usage { display: none; }
+	div#footer { border-top: 2px solid black; text-align: right; }
+}
 
 /* old, main ============================================================== */
 /* support background on left-bottom. */
@@ -218,7 +219,4 @@ div#connect_form form input { border: 1px solid #002a52; }
 
 
 
-@media print{
-	#sidebar { display: none; }
-}
 */
