@@ -34,6 +34,8 @@ def user_index(request, page=1, template='auth/user_list.html'):
 		return render_to_response('auth/user_list.csv', {'users':users},
 				mimetype='text/csv')
 
+	page = request.GET.get('page', '1')
+
 	return object_list(request, queryset=users, paginate_by=20, page=page,
 			extra_context = {'id': id, 'name': name })
 

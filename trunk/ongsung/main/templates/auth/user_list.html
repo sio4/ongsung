@@ -76,10 +76,12 @@
 
 	<div id="nav-bar">
 	<div id="nav-buttons">
-		{% if has_previous %}<a href="?page={{ previous }}">Prev</a>
+		{% if has_previous %}<a
+			href="?id={{ id }}&name={{ name }}&page={{ previous }}">Prev</a>
 		{% else %}Prev{% endif %}
-	|
-		{% if has_next %}<a href="?page={{ next }}">Next</a>
+		|
+		{% if has_next %}<a
+			href="?id={{ id }}&name={{ name }}&page={{ next }}">Next</a>
 		{% else %}Next{% endif %}
 	</div>
 
@@ -87,7 +89,7 @@
 		{% ifequal p page %}
 	<span class="current_page">{{ p }}</span>
 		{% else %}
-	<a href="?q={{ query }}&c={{ context }}&page={{ p }}">{{ p }}</a>
+	<a href="?id={{ id }}&name={{ name }}&page={{ p }}">{{ p }}</a>
 		{% endifequal %}
 	{% endfor %}
 	</div>
