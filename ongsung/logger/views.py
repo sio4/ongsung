@@ -44,7 +44,6 @@ def insert(request):
 	uu = request.POST.get('session', 'new')
 
 	content = "%s,%s,%s,%s" % (st,pr,se,uu)
-	print content
 
 	if (uu == 'new' or uu == ''):
 		ho = request.META.get('REMOTE_ADDR', '0.0.0.0')
