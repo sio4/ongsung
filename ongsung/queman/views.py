@@ -42,7 +42,7 @@ def create(request):
 	f = Feature.objects.filter(name=request.POST['feature'])[0]
 	u = User.objects.get(pk=request.POST['user'])
 	q = Queue(owner=u,feature=f,command=request.POST['command'])
-	q.save()
+	#q.save()
 
 	return render_xml(request, [q])
 
