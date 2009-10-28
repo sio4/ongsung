@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+
+{% block title %}Roll Management{% endblock %}
+
+
+{% block style %}{% endblock %}
+
+
+{% block content %}
+	<h1>Webrolls</h1>
+	<table class="expanded-sheet">
+		<tr>
+			<th>Title</th>
+			<th>Link</th>
+			<th>Rank</th>
+			<th>Action</th>
+		</tr>
+		{% for r in rolls %}
+		<tr>
+			<form method="POST" action="{{ r.id }}/update/">
+				<td><input size=40 name="title" value="{{ r.title }}" class="text"></td>
+				<td><input size=50 name="link" value="{{ r.link }}" class="text"></td>
+				<td class="ra">{{ r.rank }}</td>
+				<td>
+					<input type=hidden name="rank" value="{{ r.rank }}">
+					<input type="submit" value="Update" class="button">
+					<input type="submit" value="Delete" class="button"
+					onclick="location.href='{{ r.id }}/delete/'; return false;" />
+				</td>
+			</form>
+		</tr>
+		{% endfor %}
+		<tr>
+			<form method="POST" action="create/">
+			<td><input size=40 name="title" value="" class="text"></td>
+			<td><input size=50 name="link" value="" class="text"></td>
+			<td><input type=hidden name="rank" value="0"></td>
+			<td><input type="submit" value="Add" class="button"></td>
+			</form>
+		</tr>
+	</table>
+
+	<div id="more-options">
+		<div>
+			export list as <a href="?format=csv">CSV</a>
+		</div>
+	</div>
+
+	<div class="system-usage">
+		<div>
+			Register Related sites with "Title" and "Link". it will be automatically
+			added into the pulldown menu on the bottom line, and ranked by user's
+			activities. finally, top 10 of the sites will be displayed directlly
+			on the bottom line with it's own link.
+		</div>
+		<div>
+			You can change "Title" and "Link "directlly on this table. To change,
+			just click on the title or link of the item to change, edit text,
+			then apply this change by clink on button "Update".
+			"Delete"? maybe you know what it means.
+		</div>
+		<div>
+			Just remember! by clicking the button, only the item on the same line
+			will be changed. There is no bulk action!
+		</div>
+	</div>
+
+{% endblock %}

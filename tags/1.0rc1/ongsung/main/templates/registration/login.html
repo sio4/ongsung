@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+{% block headline %}Login{% endblock %}
+
+{% block content %}
+
+{% if form.has_errors %}
+<p>Enter Username and Password.</p>
+{% endif %}
+
+<div id="login_form" class="box">
+	<h2>Login</h2>
+	<form method="post" action=".">
+		<div style="text-align:left;"><label for="id_username">username:</label> {{ form.username }}</div>
+		<div style="text-align:left;"><label for="id_password">password:</label> {{ form.password }}</div>
+
+		<div style="text-align:center;">
+		<input type="submit" value="Login" />
+		<input type="hidden" name="next" value="{{ next }}" />
+		</div>
+	</form>
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+
+function setFocus() {
+	document.getElementById('id_username').focus();
+}
+
+window.onload = setFocus;
+
+{% endblock %}

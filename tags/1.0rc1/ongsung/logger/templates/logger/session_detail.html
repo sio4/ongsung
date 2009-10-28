@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+
+{% block title %}Session Detail{% endblock %}
+
+
+{% block style %}{% endblock %}
+
+
+{% block content %}
+<h1>Session Detail</h1>
+<table id="definition">
+	<tr><td class="label">Start time</td>
+		<td class="content">{{ session.time|date:"Y-m-d H:i:s" }}</td></tr>
+	<tr><td class="label">Session</td>
+		<td class="content">{{ session.uuid }}</td></tr>
+	<tr><td class="label">Hostname</td>
+		<td class="content">{{ session.host.name }}</td></tr>
+	<tr><td class="label">Address</td>
+		<td class="content">{{ session.host.addr }}</td></tr>
+	<tr><td class="label">Context</td>
+		<td class="content">{{ session.context }}</td></tr>
+</table>
+
+<h3>Command Log:</h3>
+
+<div id="more-options">
+Filter
+| <a href="?filter=info">Info only</a>
+| <a href="?filter=client">Client only</a>
+| <a href="?filter=server">Server only</a>
+| <a href="?filter=full">Full</a>
+</div>
+
+<table class="expanded-sheet">
+	<tr>
+		<th>#</th>
+		<th>priority</th>
+		<th>command</th>
+		<th>date</th>
+	</tr>
+	{% for log in logs %}
+	<tr>
+		<td>{{ log.serial }}</td>
+		<td>{{ log.priority }}</td>
+		<td class="statement la">{{ log.statement }}</td>
+		<td>{{ log.time|date:"Y-m-d H:i:s" }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+{% endblock %}

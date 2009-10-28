@@ -1,0 +1,32 @@
+{% if objects %}
+<table width="100%" cellspacing="0" class="button-sheet">
+<tr>
+	<th>-</th>
+	<th>device</th>
+	<th>last access</th>
+	<th>count</th>
+	<th>protocol</th>
+	<th>port</th>
+</tr>
+{% for o in objects %}
+<tr class="device-item">
+<td><a href="{% url wall.views.stared bookmark_id=o.id %}"><img class="unitPng"
+	src="/media/images/{% if o.stared %}goldstar{% else %}darkstar{% endif %}.png"
+	alt="{% if o.stared %}*{% else %}_{% endif %}" /></a></td>
+<td><a href="{% url wall.views.conn device_id=o.device.id %}">{{ o }} ({{ o.device.addr }})</a></td>
+<td>{{ o.last_date }}</td>
+<td>{{ o.count }}</td>
+<td><a href="{% url wall.views.conn device_id=o.device.id %}">{{ o.device.prot.name }} (connect)</a></td>
+<td>
+	{% if o.device.port %}
+	{{ o.device.port }}
+	{% else %}
+	-
+	{% endif %}
+</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+No object found
+{% endif %}

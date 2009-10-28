@@ -1,0 +1,48 @@
+#! /bin/sh
+# /etc/init.d/ongsung: start ongsung service.
+
+### BEGIN INIT INFO
+# Provides:             ongsung
+# Required-Start:       $syslog
+# Required-Stop:        $syslog
+# Default-Start:        2 3 4 5
+# Default-Stop:         1
+# Short-Description:    Ongsung, Single Point Access Path
+### END INIT INFO
+
+export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/home/moyang/bin
+
+ongsung_dir=/home/moyang/ongsung-dist/ongsung
+pid_file=/tmp/ongsung.pid
+
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+    log_begin_msg "Starting ongsung service..."
+		cd $ongsung_dir
+		/bin/cp -f logs/output.log logs/output.log.old
+		/bin/cp -f logs/error.log logs/error.log.old
+		su -c "PATH=$PATH ./manage.py runfcgi protocol=fcgi method=prefork \
+				host=127.0.0.1 port=3001 \
+				pidfile=$pid_file \
+				outlog=$ongsung_dir/logs/out.log \
+				errlog=$ongsung_dir/logs/error.log" moyang
+    log_end_msg $?
+    ;;
+  stop)
+    log_begin_msg "Stopping ongsung service..."
+		kill `cat $pid_file` && rm -f $pid_file
+    log_end_msg $?
+    ;;
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  *)
+    log_success_msg "Usage: /etc/init.d/ongsung {start|stop|restart}"
+    exit 1
+esac
+
+exit 0

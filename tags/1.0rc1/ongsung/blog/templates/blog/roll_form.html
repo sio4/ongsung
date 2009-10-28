@@ -1,0 +1,31 @@
+
+{% extends "base.html" %}
+
+
+{% block title %}New Roll{% endblock %}
+
+
+{% block style %}{% endblock %}
+
+
+{% block content %}
+<h1>New Webroll</h1>
+<blockquote>WARNNING! This page is page holder. for bad usage.</blockquote>
+	<table class="log-list">
+		<tr>
+			<th>{{ form.title.label_tag }}</th>
+			<th>{{ form.link.label_tag }}</th>
+			<th>{{ form.rank.label_tag }}</th>
+			<th>Action</th>
+		</tr>
+		<tr>
+			<form method="POST" action="">
+				<td>{{ form.title }}</td>
+				<td>{{ form.link }}</td>
+				<td>{{ form.rank }}</td>
+				<td><input type="submit" value="Create" /></td>
+			</form>
+		</tr>
+	</table>
+
+{% endblock %}

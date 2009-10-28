@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>{% block title %}{% endblock %} - Ongsung</title>
+		<link rel="stylesheet" href="/media/common/default.css" />
+		<link rel="stylesheet" href="{{ path_to_theme }}style.css" />
+		{% if not stared %}
+		<!--[if lt IE 7]>
+		<style>
+			div#content.frame {
+			background-image: none;
+			}
+		</style>
+		<![endif]-->
+		{% endif %}
+		<script type="text/javascript">
+//<![CDATA[
+{% block script %}{% endblock %}
+//]]>
+		</script>
+		<!--[if lt IE 7]>
+		<script type="text/javascript" src="/media/common/unitpngfix.js"></script>
+		<![endif]-->
+		{% block style %}{% endblock %}
+	</head>
+
+	<body>
+		<div id="header" class="frame">
+			{% if user.is_authenticated %}
+			<div id="system-menu">
+				<div id="sm-welcome">Welcome, {{ user.username }}</div>
+				<div id="sm-pref">
+					<ul>
+						<li><a href="/">Home</a></li>
+						<li>Preference</li>
+						<li><a href="/accounts/password/">Change Password</a></li>
+					</ul>
+				</div>
+				{% if user.is_staff %}
+				<div id="sm-admin" class="admin-only">
+					<ul>
+						<li><a href="/admin/log/">Search on Log</a></li>
+						<li><a href="/admin/user/">Users</a></li>
+						<!--li><a href="/admin/device/">Devices</a></li-->
+						<li><a href="/blog/roll/">Webrolls</a></li>
+					</ul>
+				</div>
+				{% endif %}
+				<div id="sm-blog"><a href="/blog/page/">Blog</a></div>
+				<div id="sm-logout">
+					<a href="{% url django.contrib.auth.views.logout %}">Logout</a>
+				</div>
+			</div>
+			{% endif %}
+			<h1 id="main-title"><a href="/ongsung/">Ongsung</a></h1>
+			<h5 id="tagline">secure gateway</h5>
+		</div>
+		{% block sidebar %}
+		<!--div id="sidebar" class="frame">
+		</div-->
+		{% endblock %}
+
+		<div id="content" class="frame">
+			{% if error %}
+			<div id="errbox">{{ error }}</div>
+			{% endif %}
+			{% if message %}
+			<div id="msgbox">{{ message }}</div>
+			{% endif %}
+			{% block content %}{% endblock %}
+		</div>
+
+		<div id="bottom" class="frame">
+		{% if user.is_authenticated %}
+		<!--div class="help-pack">
+			Downloads(deprecated) :
+			<ul id="side-ie7-helper">
+				<li><a href="/media/files/putty.exe">Putty</a></li>
+				<li><a href="/media/files/enable-telnet-ie7.reg">Enable Telnet (IE7 only)</a></li>
+				<li><a href="/media/files/telnet-handler-putty.reg">Set putty as terminal emulator</a></li>
+				<li><a href="/media/files/telnet-handler-default.reg">Use default telnet emulator</a></li>
+			</ul>
+		</div-->
+			{% load blogget %}
+			{% stickies %}
+		</div>
+
+		{% endif %}
+
+		<!-- now, webrolls are anonymouse visible. is it right? -->
+		<div class="webrolls">
+			{% load blogget %}
+			{% rollbox %}
+		</div>
+
+		<div id="footer" class="frame">
+			ongsung 1.0rc1 &copy; 2009 The Ongsung Project.
+			<!-- div id="valid-w3c">
+			<a href="http://validator.w3.org/check?uri=referer"><img
+				class="unitPng"
+				src="http://www.w3.org/Icons/valid-xhtml10-blue"
+				alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a>
+			<a href="http://jigsaw.w3.org/css-validator/check/referer"><img
+				class="unitPng"
+				src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+				style="border:0;width:88px;height:31px"
+				alt="Valid CSS 2.1!" /></a>
+			</div -->
+		</div>
+<!-- vim: set ts=2 sw=2 : -->
+	</body>
+</html>

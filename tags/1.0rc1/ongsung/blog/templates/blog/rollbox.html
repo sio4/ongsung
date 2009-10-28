@@ -1,0 +1,16 @@
+<select name="webroll"
+	onchange="window.open(this.options[this.selectedIndex].value,'_blank')">
+	<option value="">Family Sites</option>
+	{% for r in rolls %}
+	<option value="{% url blog.views.roll_open r.id %}">{{ r }}</option>
+	{% endfor %}
+</select>
+
+{% if top10 %}
+and Top10
+<ul class="webrolls">
+	{% for r in top10 %}
+	:<li><a href="{% url blog.views.roll_open r.id %}" target="_blank">{{ r }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}

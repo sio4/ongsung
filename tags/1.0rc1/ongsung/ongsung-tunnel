@@ -1,0 +1,122 @@
+#!/usr/bin/env python
+
+import os
+import sys
+
+import subprocess
+import signal
+import httplib, urllib
+
+webhost = 'localhost'
+
+
+TIMEOUT = 60 * 10
+
+exec_path = '@TUNNEL_EXEC_PATH@'
+exec_name = '@TUNNEL_EXEC_NAME@'
+
+
+def daemonize():
+	"""
+	Detach from the terminal and continue as a daemon.
+	"""
+	# swiped from twisted/scripts/twistd.py
+	# See http://www.erlenstar.demon.co.uk/unix/faq_toc.html#TOC16
+	# i also swiped it from:
+	# http://oebfare.com/blog/2008/nov/03/writing-custom-management-command/
+	if os.fork():	# launch child and...
+		os._exit(0)	# kill off parent
+	os.setsid()
+	if os.fork():	# launch child and...
+		os._exit(0)	# kill off parent again.
+	os.umask(077)
+	null = os.open("/dev/null", os.O_RDWR)
+	for i in range(3):
+		try:
+			os.dup2(null, i)
+		except OSError, e:
+			if e.errno != errno.EBADF:
+				raise
+	os.close(null)
+
+
+def sig_alarm(signum,frame):
+	global TIMEOUT, proc
+	print "sig_alarm: " + "..." + str(proc)
+	# set next timeout... signal.alarm(TIMEOUT)
+
+def exit_with_child(child):
+	killproc = subprocess.Popen(['kill', str(child.pid)])
+	killproc.wait()
+	print 'child maybe daed. exit'
+	exit()
+
+
+
+def logger_query(log, prio, serial, uuid, context):
+	params = urllib.urlencode({'statement':log, 'priority':prio,
+		'context':context,
+		'session':uuid, 'serial':serial})
+	headers = {"Content-type":"application/x-www-form-urlencoded"}
+	conn = httplib.HTTPConnection(webhost)
+	conn.request("POST", "/logger/insert/", params, headers)
+	response = conn.getresponse()
+	data = response.read()
+	conn.close()
+
+	return response.status,data.split()[0],data.split()[1]
+
+
+##############################################################################
+#
+# main program:
+
+context = sys.argv[1]
+target_addr = sys.argv[2]
+target_port = sys.argv[3]
+client_addr = sys.argv[4]
+tunnel_port = sys.argv[5]
+
+command = '%s/%s %s %s %s %s' % (exec_path, exec_name,
+		target_addr, target_port, client_addr, tunnel_port)
+
+daemonize()
+
+proc = subprocess.Popen(command.split(),
+		stdin=subprocess.PIPE,
+		stdout=subprocess.PIPE)
+
+signal.signal(signal.SIGALRM, sig_alarm)
+signal.alarm(TIMEOUT)
+
+target = sys.argv[1]
+
+ret = logger_query("_INFO: request log session...", 'L', 0, 'new', context)
+session = ret[1]
+serial = 0
+
+while True:
+	#proc.stdin.write('username\n')
+	#proc.stdin.write('password\n')
+	try:
+		output = proc.stdout.readline()
+	except:
+		exit_with_child(proc)
+		continue
+
+	if not output:
+		break
+
+	if output.find('os_log') != 0:
+		continue
+
+	serial += 1
+
+	print "====---- " + output.rstrip()
+	logger_query(output.rstrip(), 'L', serial, session, context)
+
+
+ret = logger_query("_INFO: log session finished...", 'L', 0, session, context)
+#proc.communicate()
+
+

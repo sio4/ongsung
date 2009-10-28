@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+
+{% block title %}Blog{% endblock %}
+{% load markup %}
+
+
+{% block style %}{% endblock %}
+
+
+{% block content %}
+	<h1>Voice of Staffs</h1>
+	<div class='pages'>
+		{% for p in object_list %}
+		<div class='page{% if p.sticky %} page-sticky{% endif %}' id="{{ p.id }}">
+			<div class='page-head'>
+				<h3 class='page-title'><a href="{{ p.id }}">{{ p.subject }}</a></h2>
+				{% ifequal user p.author %}
+				<div class='page-info-meta'>
+					<a class='' href="{{ p.id }}/edit/">Edit</a>
+					|
+					{% if p.private %}
+					<a class='p-unpri' href="{{ p.id }}/update/?private=f">Set Public</a>
+					{% else %}
+					<a class='p-pri' href="{{ p.id }}/update/?private=t">Set Private</a>
+					{% endif %}
+					|
+					{% if p.published %}
+					<a class='p-unpub' href="{{ p.id }}/update/?published=f">Unpublish</a>
+					{% else %}
+					<a class='p-pub' href="{{ p.id }}/update/?published=t">Publish</a>
+					{% endif %}
+					|
+					{% if p.sticky %}
+					<a class='p-unsti' href="{{ p.id }}/update/?sticky=f">Unset Sticky</a>
+					{% else %}
+					<a class='p-sti' href="{{ p.id }}/update/?sticky=t">Set Sticky</a>
+					{% endif %}
+					|
+					<a href="{{ p.id }}/delete/">Delete</a>
+				</div>
+				{% endifequal %}
+				<div class='page-info'>
+					Category: {{ p.category }}
+					Posted: {{ p.posted_at|date:"Y-m-d H:i:s" }}
+				</div>
+			</div>
+			<div class='page-content'>{{ p.content|textile }}</div>
+			<div class='page-tags'>
+					{% for t in p.tags %}
+					<a href=''>{{ t.name }}</a>
+					{% endfor %}
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+	<div id="nav-bar">
+	<div id="nav-buttons">
+		{% if has_previous %}<a href="?page={{ previous }}">Prev</a>
+		{% else %}Prev{% endif %}
+	|
+		{% if has_next %}<a href="?page={{ next }}">Next</a>
+		{% else %}Next{% endif %}
+	</div>
+
+	{% for p in page_range %}
+		{% ifequal p page %}
+	<span class="current_page">{{ p }}</span>
+		{% else %}
+	<a href="?query={{ query }}&page={{ p }}">{{ p }}</a>
+		{% endifequal %}
+	{% endfor %}
+	</div>
+
+	<div id="more-options">
+	</div>
+
+	{% if user.is_staff %}
+	<div id="blog-new-page">
+	<h2>Add New Page:</h2>
+	<table>
+		<form method="POST" action="{% url blog.views.page_create %}">
+			<tbody>
+			<tr><td>Subject : <input size=50 name="subject"></td></tr>
+			<tr><td><textarea rows='15' cols='50' name="content"></textarea></td></tr>
+			<tr><td>Tags : <input size=50 name="tags"></td></tr>
+			<tr>
+				<td><input type="submit" value="Submit"></td>
+			</tr>
+			</tbody>
+		</form>
+	</table>
+	</div>
+	{% endif %}
+{% endblock %}
