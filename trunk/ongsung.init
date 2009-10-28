@@ -21,6 +21,8 @@ case "$1" in
   start)
     log_begin_msg "Starting ongsung service..."
 		cd $ongsung_dir
+		/bin/cp -f logs/output.log logs/output.log.old
+		/bin/cp -f logs/error.log logs/error.log.old
 		su -c "PATH=$PATH ./manage.py runfcgi protocol=fcgi method=prefork \
 				host=127.0.0.1 port=3001 \
 				pidfile=$pid_file \
