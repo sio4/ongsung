@@ -42,7 +42,7 @@
 		<Location "/">
 			Order deny,allow
 			Deny from all
-			Allow from 10.250.0.0/16 10.200.84.0/23 203.235.222.0/23
+			Allow from 127.0.0.0/8 10.250.0.0/16 10.200.84.0/23 203.235.222.0/23
 		</Location>
 
     FastCGIExternalServer /var/www/ongsung.fcgi -host 127.0.0.1:3001
