@@ -105,20 +105,21 @@ def connect(request, device_id=None):
 			request.META['REMOTE_ADDR'])
 
 	# insert job into queue...
-	params = urllib.urlencode({'command':command, 'feature':'telnet',
-		'user':request.user.id})
-	headers = {"Content-type":"application/x-www-form-urlencoded"}
-	conn = httplib.HTTPConnection(request.META.get('HTTP_HOST','localhost'))
-	conn.request("POST", "/q/create/", params, headers)
-	response = conn.getresponse()
-	data = response.read()
-	conn.close()
+	#params = urllib.urlencode({'command':command, 'feature':'telnet',
+	#	'user':request.user.id})
+	#headers = {"Content-type":"application/x-www-form-urlencoded"}
+	#conn = httplib.HTTPConnection(request.META.get('HTTP_HOST','localhost'))
+	#conn.request("POST", "/q/create/", params, headers)
+	#response = conn.getresponse()
+	#data = response.read()
+	#conn.close()
 
-	if response.status != 200:
-		error += 'job insertion failed.'
-		error += ' %s %s' % (response.status, response.reason)
-		request.session['error'] = error
-		return HttpResponseRedirect(reverse('wall.views.index'))
+	#if response.status != 200:
+	#	error += 'job insertion failed.'
+	#	error += ' %s %s' % (response.status, response.reason)
+	#	request.session['error'] = error
+	#	print "job insertion failed: %s:%s" % (response.status, response.reason)
+	#	return HttpResponseRedirect(reverse('wall.views.index'))
 
 
 	# XXX temporary, i am the worker and i know what do i do.
