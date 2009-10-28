@@ -9,6 +9,7 @@
 
 
 {% block content %}
+	<h1>Voice of Staffs</h1>
 	<div class='pages'>
 		{% for p in object_list %}
 		<div class='page{% if p.sticky %} page-sticky{% endif %}' id="{{ p.id }}">
@@ -76,8 +77,9 @@
 	</div>
 
 	{% if user.is_staff %}
+	<div id="blog-new-page">
 	<h2>Add New Page:</h2>
-	<table class="log-list">
+	<table>
 		<form method="POST" action="{% url blog.views.page_create %}">
 			<tbody>
 			<tr><td>Subject : <input size=50 name="subject"></td></tr>
@@ -89,5 +91,6 @@
 			</tbody>
 		</form>
 	</table>
+	</div>
 	{% endif %}
 {% endblock %}

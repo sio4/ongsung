@@ -27,7 +27,7 @@ div#connect_form form input { border: 1px dotted #bbb; }
 	background: #555; padding: 0; }
 .page-title-list .page-title { border-bottom: 1px solid #444; }
 .page-title-list .page-title a { padding: 0 20px; display: block; color: #eee; }
-.page-title a:visited {color: #eee; } /* work-around for IE */
+.page-title-list a:visited {color: #eee; } /* work-around for IE */
 .page-title a:hover { background: #aaa; color: black; }
 
 /* login page */
@@ -191,6 +191,9 @@ div.help-pack a, div.help-pack a:visited { color: white; }
 	tr#query-form { display: none; }
 	div.system-usage { display: none; }
 	div#footer { border-top: 2px solid black; text-align: right; }
+
+	#blog-new-page { display: none; }
+	#content.frame { padding-bottom: 30px; }
 }
 
 /* old, main ============================================================== */
