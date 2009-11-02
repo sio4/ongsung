@@ -114,6 +114,7 @@ while True:
 
 	print "====---- " + output.rstrip()
 	logger_query(output.rstrip(), 'L', serial, session, context)
+	signal.alarm(0)
 
 
 ret = logger_query("_INFO: log session finished...", 'L', 0, session, context)
